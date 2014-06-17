@@ -12,6 +12,13 @@ document.addEventListener("DOMContentLoaded", function() {
     link.setAttribute("href", "../");
     link.textContent = "DevTools Demos";
     header.appendChild(link);
+
+    var repoLink = document.createElement("a");
+    repoLink.className = "repo-link";
+    repoLink.setAttribute("href", "https://github.com/bgrins/devtools-demos");
+    repoLink.textContent = "repository";
+    header.appendChild(repoLink);
+
     body.insertBefore(header, body.firstChild);
   }
 });

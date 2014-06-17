@@ -13,3 +13,9 @@ header {
   margin-bottom: 5px;
   padding: 4px;
 }
+
+.repo-link {
+  float: right;
+  font-size: 12px;
+  margin-right: 5px;
+}
