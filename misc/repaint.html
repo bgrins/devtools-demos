@@ -1,0 +1,56 @@
+<!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
+
+<style type='text/css'>
+
+#container {
+  border: 1px solid;
+}
+
+.moving-box {
+  height: 20%;
+  width:20%;
+  margin: 2%;
+  padding: 2%;
+  background-color: blue;
+  color: white;
+  font-size: 24px;
+}
+
+#moving-box-left-margin {
+  transition: margin-left 4s;
+}
+
+#moving-box-transform {
+  transition: transform 4s;
+}
+
+body:hover #moving-box-left-margin{
+  margin-left: 74%;
+}
+
+#moving-box-transform {
+  transform: translate(0);
+}
+body:hover #moving-box-transform {
+  transform: translate(300%);
+}
+
+</style>
+
+  <h1>Transitions repaint</h1>
+    <div id="container">
+      <div class="moving-box" id="moving-box-left-margin">Transition using margin-left</div>
+      <div class="moving-box" id="moving-box-transform">Transition using transform</div>
+    </div>
+
+    <p>
+      You should see that the margin-left version triggers a series of repaints as the element moves, while the transform version only causes repaints in the start and end positions.
+    </p>
+    <p>
+      Why? Well, when you use transform, the browser creates a separate layer for the element. So when the element is moved, all that's changed is the relation of the two layers to each other, which is handled in composition: neither layer needs a repaint.
+    </p>
+    <p>
+      In this case, with a simple style, the extra repaints don't make much of a difference. But if the style were computationally expensive to paint, they might. It's difficult to know what optimizations the browser will make to minimize repaints, and they are subject to change from one version to the next. So testing your website with the paint flashing tool helps ensure that it's still performing optimally.
+    </p>
+
+</body></html>

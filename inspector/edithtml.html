@@ -1,0 +1,34 @@
+<!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
+
+<h1>Editing HTML</h1>
+
+<p>Editing outer HTML can be tricky, especially if the node is changing or being removed while it is being edited.</p>
+
+  <script>
+    var max = 10000;
+    var current = 0;
+    var interval = setInterval(function() {
+      current+=1000;
+      var node = document.querySelector("#self-destruct");
+      var span = node.querySelector("span");
+      span.textContent = (max - current) / 1000;
+
+      if (current >= max) {
+        clearInterval(interval);
+        node.parentNode.removeChild(node);
+      }
+    }, 1000);
+  </script>
+
+  <h2 id="self-destruct" class="one" class="two">This heading will self destruct in <span>10</span> seconds</h2>
+  <ul style="background: #333; color: #fff; ">
+    <li>Feel free to edit these list items.</li>
+    <li>They <strong>aren't <s>going</s> <b>anywhere</b></strong></li>
+  </ul>
+  <p>
+
+    Plenty of space
+
+  </p>
+
+</body></html>

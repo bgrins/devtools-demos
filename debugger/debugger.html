@@ -1,0 +1,135 @@
+<!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
+
+<p>Log:</p>
+<button>Click me!</button>
+<input id="input_field" type="text">
+<div id="the-div"></div>
+<script type="text/javascript">
+
+function test(aArg, bArg, cArg, dArg, eArg, fArg) {
+  var p = document.getElementsByTagName("p")[0];
+  p.innerHTML += "<br>entered test()";
+  var a = 1;
+  var b = { a: a, b: null };
+  var _sadness = undefined;
+  var _disconsolateness = { tribulation: undefined };
+  
+  var p2 = {};
+  Object.defineProperty(p2, "p", { value: p });
+  Object.freeze(p);
+  Object.seal(p);
+
+  p.innerHTML += "<br>before eval";
+  var pAsProto = Object.create(p);
+  var docAsProto = Object.create(document);
+  var doc2 = Object.create(docAsProto);
+  window.pAsProto = pAsProto;
+    
+  with (b) {
+    var c = eval("var line0 = Error().lineNumber;\n" +
+       "debugger;\n" +   // line0 + 1
+       "var a = 1;\n" +  // line0 + 2
+       "var b = 2;\n");  // line0 + 3
+  }
+
+ /**
+  * This is a nice comment.
+  */
+  var d = Object.create(null);
+  var e = new ArrayBuffer(Math.pow(2, 16));
+  var f = new Int32Array(e);
+  var g = new Int16Array(e);
+
+  for (var i = 0; i < f.length; i++) {
+    f[i] = i * 2;
+  }
+  for (var i = 0; i < g.length; i++) {
+    g[i] = i * 3;
+  }
+
+  var h = {};
+  for (var i = 0; i < Math.pow(2, 14); i++) {
+    h[i] = i;
+  }
+
+  var i = [1, 2];
+  i.push(3);
+  i[4] = 4;
+  i.splice(1, 1);
+  i.push(5);
+  i[5] = 6;
+  
+  var simple = {
+    method: function() {}
+  };
+  
+  ({
+    another_method: function() {}
+  })
+
+  var obj = {
+    _prop: null,
+    get prop() { return this._prop; },
+    set prop(val) { this._prop = val; }
+  };
+
+  obj.prop = 42;
+  console.log(obj.prop);
+
+  p.innerHTML += "<br>after eval";
+  p.innerHTML += "<br>before debugger";
+  debugger;
+  p.innerHTML += "<br>after debugger";
+  p.innerHTML += "<br>exiting test()";
+  
+  return p;
+}
+
+var load = function() {
+  var p = document.querySelector("p");
+  p.innerHTML += "<br>entered load()";
+  var a = { a: 1 };
+  var b = "beta";
+  test(a, b, [1, 2, 3], false, null);
+  p.innerHTML += "<br>exiting load()";
+
+  var c = this.c = {
+    foo: {
+      _foo: function __foo() {}
+    },
+    bar: function _bar() {},
+    baz: function() {}
+  };
+
+  var d = c = c.foo = this.c.foo = function() {};
+  d = { _d: function __d() {} };
+  d = function _d() {};
+  d = function() {};
+
+  var x = c.foo(c.bar(c.baz({
+    y: {
+      z: dump({
+        a: a
+      })
+    }
+  })));
+
+  new c.foo._foo(c, c.foo, this.c.foo, this.c.foo._foo, __foo);
+  c.bar(c, c.bar, this.c.bar, _bar);
+
+  dump(a, b, c, 42, "42");
+}
+
+var button = document.querySelector("button");
+button.addEventListener("click", load, false);
+
+var input = document.querySelector("input");
+input.addEventListener("keyup", function() {
+  var p = document.querySelector("p");
+  p.innerHTML += ".";
+}, false);
+
+</script>
+
+</body></html>
+

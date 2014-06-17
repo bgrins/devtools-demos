@@ -1,0 +1,21 @@
+<!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
+
+<script>
+  var current = 1;
+  var interval = setInterval(function() {
+    document.querySelector("h2 span").textContent = current++;
+    document.querySelector("h2.changing").setAttribute("data-count", current);
+  }, 1000);
+</script>
+
+<h1>Markup Mutations in the Inspector</h1>
+
+<p>
+  Viewing and editing content in the markup view and style inspector while it is changing can be tricky.
+</p>
+
+<h2>Number of seconds since loading: <span /></h2>
+<h2 class="changing">Changing attribute</h2>
+
+</body>
+</html>

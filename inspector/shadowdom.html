@@ -1,0 +1,60 @@
+<!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
+
+  <style type="text/css">
+    body {
+      color: blue;
+    }
+    em {
+      color: red;
+    }
+  </style>
+
+<p>
+(Firefox): make sure <em>dom.webcomponents.enabled</em> is true
+</p>
+
+<!-- Comment
+
+-->
+
+<h2>Shadow DOM 1</h2>
+<button>Hello World</button>
+<script>
+host = document.querySelector("button");
+var root = host.createShadowRoot();
+root.textContent = 'Goodbye World';
+</script>
+
+
+<h2>Shadow DOM 2</h2>
+<div id="nameTag">OLD CONTENT</div>
+<template id="nameTagTemplate">
+<style type="text/css">
+:host {
+  border: 2px solid brown;
+  color: red;
+}
+.boilerplate {
+  border: 2px solid red;
+  color: blue;
+}
+</style>
+<div class="outer">
+  <div class="boilerplate">
+    Hi there! My name is
+  </div>
+  <div class="name">
+    <em>B<b>o</b>b</em>
+  </div>
+</div>
+</template>
+
+<script>
+var shadow = document.querySelector('#nameTag').createShadowRoot();
+var template = document.querySelector('#nameTagTemplate');
+shadow.appendChild(template.content);
+// template.remove();
+</script>
+
+
+</body></html>

@@ -1,0 +1,34 @@
+<!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
+
+<style type="text/css">
+@media not all {
+  div {
+    color: blue;
+  }
+}
+
+@media all {
+  /* Nested rule */
+  @media (max-width: 400px) {
+    div {
+      color: red;
+    }
+  }
+}
+
+div {
+  width: 20px;
+  height: 20px;
+  background-color: ghostwhite;
+}
+
+@media (max-width: 400px) {
+  div {
+    color: green;
+  }
+}
+</style>
+<link rel="stylesheet" href="media.css" />
+  <h1>Style Editor Media Rules</h1>
+  <p>A variety of media rules in both internal and external files</p>
+</body></html>

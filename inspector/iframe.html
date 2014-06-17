@@ -1,0 +1,27 @@
+<!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
+
+<h1>Iframes</h1>
+<p>
+  Inspecting iframes
+</p>
+  <div id="live"></div>
+  <script type="text/javascript">
+
+      var iframe = document.createElement('iframe');
+      document.body.appendChild(iframe);
+      iframe.src = "mutations.html"
+
+      document.addEventListener("DOMContentLoaded", function() {
+        var iframe = document.createElement('iframe');
+        iframe.src = "edithtml.html"
+        document.body.appendChild(iframe);
+      });
+
+      window.addEventListener("load", function() {
+        var iframe = document.createElement('iframe');
+        document.body.appendChild(iframe);
+        iframe.src = "shadowdom.html"
+      });
+  </script>
+</body>
+</html>

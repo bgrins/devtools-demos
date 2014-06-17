@@ -1,0 +1,15 @@
+{
+  "name": "devtools-demos",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bgrins/devtools-demos.git"
+  },
+  "description": "Demo and test cases for using DevTools",
+  "author": "Brian Grinstead",
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-jshint": "^0.10.0"
+  }
+}
