@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
   if (body.classList.contains("header")) {
     var header = document.createElement("header");
     var link = document.createElement("a");
-    link.setAttribute("href", "../");
+    link.setAttribute("href", "../index.html");
     link.textContent = "DevTools Demos";
     header.appendChild(link);
 
