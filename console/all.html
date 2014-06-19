@@ -1,0 +1,674 @@
+<!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script>
+
+
+  <head><![CDATA[ lolz ]]>
+    <style type="text/css">
+      @import "all1.css?testfoo=3#bazbaz";
+
+      .foobar { color: pink; }
+
+      .test, #test { color: green }
+      #test {
+        border: 20px solid blue;
+      }
+      #foobar, #unmatched {
+        background: gray;
+        color: gray;
+        -webkit-bad-property: value;
+        -o-bad-property: value;
+        -ms-bad-property: value;
+        -unknown-property: value;
+        woahaha-property: value;
+        broken: value;
+        background: error;
+      }
+      #match { text-decoration: underline }
+      #editable {
+        border: 1px solid blue;
+      }
+      #editable:focus {
+        border: 2px solid red;
+      }
+      #menu p {
+        display: none;
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        background: yellow;
+        margin: 0;
+      }
+      #menu:hover p { display: block }
+    </style>
+    <link rel=stylesheet href="test-unmatched.css?foobaz=foobar#lolz">
+  </head>
+
+<body class="header">
+  <h1>Mihai's Fun Test Page</h1>
+  <p>It's listed under console/, but this page really tests some of everything.  Messed up @imports, web workers, console API, iframes, script errors - this page has something for everyone.  This is a copy of: <a href="https://mihaisucan.github.io/mozilla-work/test.html">https://mihaisucan.github.io/mozilla-work/test.html</a>
+  </p>
+
+    <div class="test">hello world!</div>
+    <div id="test">hello world!</div>
+    <div id="foobar" style="font-weight:bold;color:white">
+      <p>hello world!</p>
+      <div class="test" style="color:blue;padding:5px;">hello world!</div>
+    </div>
+    <div class="foobar">foobar</div>
+    <div id="match">lolz<p id="dontmatch">foololz</p></div>
+
+    <button id=generateError>generate error!</button>
+    <button id=consoleAPI>console api</button>
+    <button onclick="doMyXHR()">do XHR</button>
+    <button onclick="logEvents()">log events</button>
+    <button onclick="console.clear()">clear</button>
+    <button onclick="console.group('foo')">group</button>
+    <button onclick="console.groupEnd('foo', window, document)">groupEnd</button>
+
+<script type="application/javascript">
+(function() {
+ if (window.parent !== window) {
+   return;
+ }
+
+var myWorker = new Worker("all-worker.js");
+
+myWorker.onmessage = function(ev)
+{
+  console.log("Worker said: ", ev.data);
+};
+
+myWorker.postMessage("page init");
+
+window.sendMessageToWorker = function()
+{
+  myWorker.postMessage("time");
+  var msg = "msg from outer space " + Date.now();
+  console.log("sending message to worker:", msg);
+  myWorker.postMessage(msg);
+  setTimeout(function() {
+    myWorker.postMessage("timeEnd");
+  }, 1000);
+};
+
+})();
+</script>
+
+    <script type="text/javascript">
+      //window.console = {};
+      //window.console.error = function() { alert("lol") };
+
+      //function $(param) {
+      //  console.log("$('" + param + "') was called");
+      //}
+
+      var loggingEvents = false;
+      function logEvents() {
+        var events = ['mouseover', 'mouseout', 'focus', 'blur', 'click',
+            'dblclick', 'mousedown', 'mouseup', 'contextmenu', 'keydown',
+            'keypress', 'keyup'];
+        if (loggingEvents) {
+          events.forEach(function(ev) {
+            window.removeEventListener(ev, onGenericEvent);
+          });
+        } else {
+          events.forEach(function(ev) {
+            window.addEventListener(ev, onGenericEvent);
+          });
+        }
+        loggingEvents = !loggingEvents;
+        console.log('logging events', loggingEvents);
+      }
+      function onGenericEvent(ev) {
+        console.log('generic event', ev);
+      }
+
+      if (window.$) {
+        $.foobar = 'omg';
+        $.zuzu = 'boom';
+        $.duron = { opteron: "amd", athlon: "amd", core2duo: "intel", nehalem:
+          "intel" };
+
+        Object.defineProperty($, "getterAndSetter", {
+          enumerable: true,
+          get: function fooGet() { return "foo"; },
+          set: function fooSet() { 1+2 },
+        });
+      }
+
+      (function () {
+        bigDeal = "lolz";
+
+        function foobarTraceMe1(a, b) {
+          console.count("foocount");
+          return foobarTraceMe2(a+1, b+2);
+        }
+
+        function foobarTraceMe1b(a, b) {
+          return foobarTraceMe2(a+3, b+4);
+        }
+
+        function foobarTraceMe2(a, b) {
+          return foobarTraceMe3(a+1, b+2);
+        }
+
+        function foobarTraceMe3(a, b) {
+          console.assert(false, "test stacktrace in console.assert", window);
+          console.trace();
+          console.error("test stacktrace in console.error", document.body);
+          return a+1 + b+2;
+        }
+
+        var btnGenerateError = document.querySelector("#generateError");
+        btnGenerateError.addEventListener("click", function(ev) {
+          try {
+            var foo1 = document.querySelector("div:foobar:zoo() !@#");
+          } catch (ex) {
+            window.lastDOMException = ex;
+          }
+          var foo2 = document.querySelector("div:foobar:zoo() !@#");
+        });
+        btnGenerateError.addEventListener("click", function(ev) {
+          document.body.childNodes[1000];
+          if (ev.preventBubble) {
+            ev.preventBubble();
+          }
+          try {
+            function lolz() {
+              foobarObject.intern(window);
+            }
+            function lolz2() {
+              lolz();
+            }
+            lolz2();
+          } catch (ex) {
+            window.lastException = ex;
+          }
+          foobarObject.intern(document.body);
+        }, false);
+
+        var btnConsoleAPI = document.querySelector("#consoleAPI");
+        btnConsoleAPI.addEventListener("click", function(ev) {
+          //foobarTraceMe1(1, 2);
+          console.time("foo");
+
+          console.log("foo %c zuzu %c bla bla", "color:red;background:cyan", "color: blue");
+          console.log("%cfoo %c zuzu %c bla bla", "color:pink", "color:red;font-size:1.3em", "color: blue");
+          console.log("%cbackground image", "color:green;font-weight:bold;background:blue url('data:image/gif;base64,R0lGODlhAQABAPAAAP8AAP///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==')");
+          console.log("foo%cbar%cboom", 'color:blue', 'color:green');
+          console.log("foo%szoom%cbar %d lolz%cboom%oomg%cred", ' test ', 'color:blue', Date.now(), 'color:green;font-weight:bold', window, 'color:red;font-size:2em');
+          console.log("%cbad boy", 'font:1.4em arial; padding:6px; position:absolute; top:0; left:0; background:cyan; width:10em; height: 0; overflow: hidden; text-decoration:underline; display: inline-block');
+          console.info("foobar%cbazbaz", 'color:green', window, "%comg", 'color:blue');
+
+          var testDir = {
+            testProp: "testValue",
+            hello: 1,
+            world: true,
+          };
+          console.dir(testDir);
+          console.count("foocount");
+          console.log("tezt", testDir);
+
+          myEventHandler(ev);
+
+          console.dir(document.styleSheets, console);
+          foobarTraceMe1(1, 2);
+          foobarTraceMe1b(3, 4); foobarTraceMe1b(5, 6);
+
+          // bug 865288
+          for (var i = 0; i < 3; i++) {
+            var o = { i: i };
+            console.log("test no repeat", o);
+          }
+
+          console.log("test repeat", 0);
+          console.log("test repeat", 0);
+          console.log("test repeat", 2); console.log("test repeat", 2);
+          console.log("test repeat", 0);
+
+          console.count("foocount");
+
+          console.assert("zuzu", "zuzu assert");
+          console.assert(true, "true assert", "foo");
+          console.assert(false, "false assert %s", document, window, "foo");
+          console.assert("", "falsy assert");
+
+
+          var result = console.timeEnd("foo");
+          console.log("timeEnd result " + result);
+
+          result = console.timeEnd("foo2");
+          console.log("timeEnd2 result " + result);
+
+          console.time();
+          console.timeEnd();
+        }, false);
+
+        var myEventHandler = function (ev, dbg) {
+          if (dbg) {
+            debugger;
+          }
+
+          console.log("foo repeat");console.log("foo repeat");
+          console.log("foo repeat");console.error("foo repeat");
+
+          var result = console.log("log", ev.type, ev);
+          console.__returnValue__ = 'test';
+          result = console.log("console log result", result);
+
+          /*
+          Object.defineProperty(console, "__returnValue__", {
+            get: function() {
+              return "foo";
+            },
+            enumerable: true,
+            configurable: false
+          });*/
+
+          result = console.log("console log result 2", result);
+
+          console.log("console log result 3", result);
+
+          console.info("info " + ev.type);
+          console.error("error " + ev.type);
+          console.warn("warn " + ev.type);
+          console.error("error omg %s %o %d %i %f %a", "aloha", document.body, 
+              window.innerWidth, window.innerHeight, Math.PI, "zuzu", null, 
+              undefined);
+          if (console.exception) {
+            console.exception("exception", window.lastException);
+          }
+          console.debug("debug", ev.type, ev);
+        };
+
+        //document.body.addEventListener('mousedown', myEventHandler, false);
+        //document.body.addEventListener('mouseup', myEventHandler, false);
+        //document.body.addEventListener('click', myEventHandler, false);
+        //document.body.addEventListener('dragstart', myEventHandler, false);
+        //document.body.addEventListener('dragend', myEventHandler, false);
+
+        window.myEventHandler = myEventHandler;
+      })();
+
+      function createIframeDocument()
+      {
+        var iframe = document.createElement('iframe');
+
+        iframe.addEventListener("load", function () {
+          iframe.removeEventListener("load", arguments.callee, false);
+
+          var div = iframe.contentDocument.createElement('div');
+          div.textContent = 'little div';
+          iframe.contentDocument.body.appendChild(div);
+
+          var iframe2 = iframe.contentDocument.createElement('iframe');
+
+          iframe2.addEventListener('load', function () {
+            iframe2.removeEventListener('load', arguments.callee, false);
+
+            var div2 = iframe2.contentDocument.createElement('div');
+            div2.textContent = 'nested div';
+            iframe2.contentDocument.body.appendChild(div2);
+
+            var div3 = iframe2.contentDocument.createElement('div');
+            div3.textContent = 'big div';
+            div3.setAttribute('style', 'height:500px; width:500px; border:1px solid gray;');
+
+            iframe2.contentDocument.body.appendChild(div3);
+          }, false);
+
+          iframe2.src = 'data:text/html,nested iframe';
+          iframe2.setAttribute("style", iframe.getAttribute("style"));
+          iframe.contentDocument.body.appendChild(iframe2);
+        }, false);
+
+        iframe.src = 'data:text/html,little iframe';
+        iframe.setAttribute("style",
+            "padding: 10px; border: 5px solid red; width: 350px; height: 250px");
+
+        var placeholder = document.getElementById("iframesplaceholder");
+        placeholder.appendChild(iframe);
+      }
+
+      function doMyXHR()
+      {
+        var req = new XMLHttpRequest();
+        req.open('GET', 'http://www.mozilla.org/', true);
+        req.onreadystatechange = function() {
+          if (req.readyState == 4) {
+            console.log("XHR done");
+          }
+        };
+        req.send(null);
+      };
+
+      window.addEventListener('load', createIframeDocument, false);
+
+      (function(){
+      var req = new XMLHttpRequest();
+      req.open('GET', 'http://www.mozilla.org/', true);
+      req.onreadystatechange = function() {
+        if (req.readyState == 4) {
+          console.log("XHR done");
+          xhrException();
+          console.log("XHR - should not execute!");
+        }
+      };
+      req.send(null);
+      })();
+    </script>
+
+    <script>
+(function() {
+      window.foobarObject = {a: 1, b: 2, c: 3,
+        lolz: function(a, b) {
+          console.log('DO NOT COMPUTE');
+          alert('omg!');
+          return 'eh';
+        },
+        lolz2: function named2(a, b) { },
+        lolz3: function() { },
+        lolz4: function(a, b, c) { },
+        lolz5: function named5() { },
+        lrrr: ["a", 42, "b", true, document, Date.now(), new Date(),],
+        zoidberg: ["a", false, null, undefined, /f*o+obar?/],
+        fry: [function zuzu() { return 'lolz'; }, "", window, new Date(), /NDND/gimy],
+        whoopwhoop: [],
+        eyePhone: new Set([1,2,'a',document, window.getSelection()]),
+        bender: new Map(),
+        sparse: new Array(10),
+      };
+      foobarObject.lolz4.displayName = "withDisplayName4";
+      foobarObject.lolz5.displayName = "overwriteNameWithDisplayName5";
+      foobarObject.zoidberg[0] = foobarObject;
+      foobarObject.lrrr[2] = foobarObject.fry;
+      for (var i = 0; i < 500; i++) {
+        foobarObject.whoopwhoop[i] = "omg" + i;
+      }
+      foobarObject.bender.set("abba", "niyaz");
+      foobarObject.bender.set("azizam", "asiri");
+      foobarObject.bender.set(document.body, document.head);
+      Object.defineProperty(foobarObject, "nonEnumerable!!", {
+        value: "ishtenem",
+        enumerable: false,
+      });
+      foobarObject.sparse[0] = 'zuzu';
+      foobarObject.sparse[8] = 'console-fun';
+})();
+    </script>
+
+    <script>
+(function() {
+ window.foobarObject = window.foobarObject || {};
+      foobarObject.frag = document.createDocumentFragment();
+      var span = document.createElement("span");
+      span.className = 'foo';
+      span.dataset.lolz = 'hehe';
+      var div = document.createElement('div')
+      div.id = 'fragdiv';
+      var anchor = document.createElement('a');
+      anchor.href = '#';
+      div.appendChild(anchor);
+      foobarObject.frag.appendChild(span);
+      foobarObject.frag.appendChild(div);
+
+      for (var i = 0; i < 15; i++) {
+        var elem = document.createElement("div");
+        elem.className = 'elem' + i;
+        foobarObject.frag.appendChild(elem);
+      }
+})();
+    </script>
+
+<script type="application/javascript;version=1.8">
+(function(){
+function nukeFunc() {
+  var a = 5;
+  while(a < 10)
+    yield a++;
+}
+
+window.nuke = nukeFunc();
+nuke.next();
+
+
+var lang = { name: 'JavaScript', birthYear: 1995, blabla: "cucu" };
+window.nuke2 = Iterator(lang);
+
+function Range(low, high){
+  this.low = low;
+  this.high = high;
+}
+
+function RangeIterator(range){
+  this.range = range;
+  this.current = this.range.low;
+}
+
+RangeIterator.prototype.next = function(){
+  if (this.current > this.range.high)
+    throw StopIteration;
+  else
+    return this.current++;
+};
+
+Range.prototype.__iterator__ = function(){
+  return new RangeIterator(this);
+};
+
+window.nuke3 = new Range(3, 15);
+
+window.nuke4 = (i * 2 for (i in nuke3));
+
+window.myGettersAndSetters = {
+  _cucu: 5,
+  get cucuRigu() { return this._cucu++; },
+  set cucuRigu(val) { this._cucu = val; },
+};
+
+})();
+
+function scrollTest()
+{
+  // just enlarge #bigarea so i have something to scroll.
+  var elem = document.getElementById("bigarea");
+  let height = (window.innerHeight * 2) + "px";
+  if (elem.style.height == height)
+    elem.style.height = "auto";
+  else
+    elem.style.height = height;
+}
+
+function myDoPaste()
+{
+  document.execCommand("paste", false, null);
+}
+
+function myOnPaste(e)
+{
+  console.log("onpaste!");
+}
+
+function myOnMouseDown(e)
+{
+  return;
+  console.log("myOnMouseDown", e.type, "which", e.which, "phase", e.eventPhase);
+  if (e.which == 3) {
+    console.log("myOnMouseDown preventDefault");
+    var div = document.querySelector("div[contenteditable]");
+    div.contentEditable = false;
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.stopImmediatePropagation) {
+      e.stopImmediatePropagation();
+    }
+  }
+}
+
+function myOnMouseUp(e)
+{
+  return;
+  console.log("myOnMouseUp", e.type, "which", e.which, "phase", e.eventPhase);
+  if (e.which == 3) {
+    console.log("myOnMouseUp preventDefault");
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.stopImmediatePropagation) {
+      e.stopImmediatePropagation();
+    }
+  }
+}
+
+function myOnClick(e)
+{
+  return;
+  console.log("myOnClick", e.type, "which", e.which, "phase", e.eventPhase);
+  if (e.which == 3) {
+    console.log("myOnClick preventDefault");
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.stopImmediatePropagation) {
+      e.stopImmediatePropagation();
+    }
+  }
+}
+
+function myOnContextMenu(e)
+{
+  return;
+  console.log("myOnContextMenu", e.type, "phase", e.eventPhase);
+  e.preventDefault();
+  e.stopPropagation();
+  if (e.stopImmediatePropagation) {
+    e.stopImmediatePropagation();
+  }
+}
+
+window.addEventListener("load", function _onload() {
+    window.removeEventListener("load", _onload, false);
+
+    var div = document.querySelector("div[contenteditable]");
+    document.body.addEventListener("mousedown", myOnMouseDown, true);
+    document.body.addEventListener("mouseup", myOnMouseUp, true);
+    document.body.addEventListener("click", myOnClick, true);
+    document.body.addEventListener("contextmenu", myOnContextMenu, true);
+}, false);
+</script>
+
+<script type="application/javascript">
+var perf_loops = 1000;
+var perf_click = 0;
+
+// from bug 722685 - thanks Kevin!
+function perfSimpleConsoleAPI() {
+  //console.log("perf_click", perf_click++);
+  //var dumpTime = runDumpPerfTest();
+  var dumpTime = 0;
+  console.time("perf test");
+  var start = new Date().getTime();
+  var startDate = new Date();
+  var simple = runSimplePerfTest();
+  //var interpolation = runInterpolationPerfTest();
+  var interpolation = 0;
+  var end = new Date().getTime();
+  console.timeEnd("perf test");
+  var elem = document.getElementById("consoleperf-results");
+  elem.innerHTML = "Start time: " + startDate + "<br>\n" +
+    "Dump simple string: " + dumpTime + "<br>\n" +
+    "Simple string: " + simple + "<br>\n" +
+    "Interpolated string: " + interpolation + "<br>\n" +
+    "Total: " + (end - start);
+}
+
+function runDumpPerfTest() {
+  var start = new Date().getTime();
+  for (var i = 0; i < perf_loops; i++) {
+    dump("Simple string " + i + "\n");
+  }
+  var end = new Date().getTime();
+  return end - start;
+}
+
+function runSimplePerfTest() {
+  var start = new Date().getTime();
+  for (var i = 0; i < perf_loops; i++) {
+    console.log("Simple string " + i);
+  }
+  var end = new Date().getTime();
+  return end - start;
+}
+
+function runInterpolationPerfTest() {
+  var start = new Date().getTime();
+  for (var i = 0; i < perf_loops; i++) {
+    console.log("Interpolated string %s", i);
+  }
+  var end = new Date().getTime();
+  return end - start;
+}
+
+function perfObjectConsoleAPI() {
+  //console.log("perf_click", perf_click++);
+  var start = new Date().getTime();
+  for (var i = 0; i < perf_loops; i++) {
+    var obj = {time: new Date().getTime(), index: i};
+    console.log(obj);
+    //console.dir(obj);
+  }
+  var end = new Date().getTime();
+  var elem = document.getElementById("consoleperf-results");
+  elem.innerHTML = "console.log with objects: " + (end - start);
+}
+
+function perfScriptErrors() {
+  var iframe = document.createElement("iframe");
+  iframe.style.display = "none";
+  document.body.appendChild(iframe);
+  var doc = iframe.contentWindow.document;
+  console.time("script errors");
+  var start = new Date().getTime();
+  for (var i = 0; i < perf_loops; i++) {
+    doc.writeln("<script> window.perfTest" + i + "(); <" + "/script>");
+  }
+  var end = new Date().getTime();
+  console.timeEnd("script errors");
+  var elem = document.getElementById("consoleperf-results");
+  elem.innerHTML = "script errors: " + (end - start) + "ms";
+  doc.close();
+  setTimeout(function() {
+      document.body.removeChild(iframe);
+  }, 2000);
+}
+</script>
+<script type="application/javascript;version=1.8">
+  "use strict";
+  testUnassigned = "lolz";
+  console.log("foobaraaaaaaa!!!!!!!!!!!!!!!!");
+</script>
+    <script type="application/javascript;version=1.7" src="all.js"></script>
+    <img src="lolz.png">
+    <div id="iframesplaceholder" style="display:inline"></div>
+    <p><button onclick="scrollTest()">scroll test</button>
+    <button onclick="myEventHandler(event, true)">debug!</button>
+    <button onclick="perfSimpleConsoleAPI()">perf test: simple console API</button>
+    <button onclick="perfObjectConsoleAPI()">perf test: console API with object</button></p>
+    <p><button onclick="sendMessageToWorker()">worker console test</button></p>
+    <p id="consoleperf-results"></p>
+    <div id="menu">menu<p>submenu</p></div>
+    <div style="border: 1px red solid" id="bigarea">big area</div>
+    <p>booo</p>
+    <div id="editable">
+      <div>div#editable</div>
+      <div contenteditable="" onpaste="myOnPaste(event)">foo bar pre 
+      editable</div>
+    </div>
+    <textarea>foo</textarea>
+    <p><button onclick="myDoPaste()">paste!</button> <input type="password" name="lolz"></p>
+    <div id="crossdomainiframe">
+      <iframe src="http://127.0.0.1/~mihai/mozilla/test.html"></iframe>
+    </div>
+    <p><a href="https://ie.microsoft.com/testdrive/browser/mixedcontent/assets/woodgrove.htm">mixed content warning test</a></p>
+    <form method="get" action="?">
+      <p><input type="password" name="lol"></p>
+    </form>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+@import "all2.css";
+
+.foobar { color: blue }
+
+@media screen {
+  .foobar {
+    border: 1px solid green;
+    text-align: error;
+    -whatever: test;
+    -webkit-omg: lolz;
+  }
+}
