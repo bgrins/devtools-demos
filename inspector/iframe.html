@@ -2,11 +2,12 @@
 
 <h1>Iframes</h1>
 <p>
-  Inspecting iframes
+  Inspecting iframes that have been added to the page in a variety of ways.
 </p>
-  <div id="live"></div>
+<style type='text/css'>
+iframe { min-height: 500px;}
+</style>
   <script type="text/javascript">
-
       var iframe = document.createElement('iframe');
       document.body.appendChild(iframe);
       iframe.src = "mutations.html"
@@ -23,5 +24,6 @@
         iframe.src = "shadowdom.html"
       });
   </script>
+  <iframe src="nested-iframe.html"></iframe>
 </body>
 </html>
