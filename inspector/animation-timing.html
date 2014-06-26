@@ -1,0 +1,85 @@
+<!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
+
+  <style type="text/css">
+
+  .container {
+    width: 80%; margin: 0 auto;
+  }
+  .box {
+    width: 50px;
+    height: 50px;
+    margin: 10px 0;
+    position:relative;
+    -webkit-animation: slideshow 10s infinite;
+    animation:    slideshow 10s infinite;
+  }
+
+  #box1 {
+    animation-timing-function: ease;
+    -webkit-animation-timing-function: ease;
+  }
+  #box2 {
+    animation-timing-function: ease-in;
+    -webkit-animation-timing-function: ease-in;
+  }
+  #box3 {
+    animation-timing-function: ease-out;
+    -webkit-animation-timing-function: ease-out;
+  }
+  #box4 {
+    animation-timing-function: ease-in-out;
+    -webkit-animation-timing-function: ease-in-out;
+  }
+  #box5 {
+    animation-timing-function: linear;
+    -webkit-animation-timing-function: linear;
+  }
+  #box6 {
+    animation-timing-function: cubic-bezier(0.1, 0.7, 1.0, 0.1);
+    -webkit-animation-timing-function: cubic-bezier(0.1, 0.7, 1.0, 0.1);
+  }
+  #box7 {
+    animation-timing-function: step-start;
+    -webkit-animation-timing-function: step-start;
+  }
+  #box8 {
+    animation-timing-function: step-end;
+    -webkit-animation-timing-function: step-end;
+  }
+  #box9 {
+    animation-timing-function: steps(4, end);
+    -webkit-animation-timing-function: steps(4, end);
+  }
+  #box10 {
+    animation-timing-function: ease, step-start, cubic-bezier(0.1, 0.7, 1.0, 0.1);
+    -webkit-animation-timing-function: ease, step-start, cubic-bezier(0.1, 0.7, 1.0, 0.1);
+  }
+
+
+  @-webkit-keyframes slideshow {
+    0%    {  width: 50px; background: blue;}
+    100%  {  width: 100%; background: orange;}
+  }
+  @keyframes slideshow {
+    0%    {  width: 50px; background: blue;}
+    100%  {  width: 100%; background: orange;}
+  }
+
+  </style>
+
+  <h1>Animation Timing Functions</h1>
+
+  <div class="container">
+    <div class='box' id='box1'></div>
+    <div class='box' id='box2'></div>
+    <div class='box' id='box3'></div>
+    <div class='box' id='box4'></div>
+    <div class='box' id='box5'></div>
+    <div class='box' id='box6'></div>
+    <div class='box' id='box7'></div>
+    <div class='box' id='box8'></div>
+    <div class='box' id='box9'></div>
+    <div class='box' id='box10'></div>
+  </div>
+
+</body></html>
