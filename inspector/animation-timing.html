@@ -10,8 +10,10 @@
     height: 50px;
     margin: 10px 0;
     position:relative;
-    -webkit-animation: slideshow 10s infinite;
-    animation:    slideshow 10s infinite;
+    border-radius: 50%;
+    transform: translate3d(0, 0, 0);
+    -webkit-animation: slideshow 3s infinite;
+    animation:    slideshow 3s infinite;
   }
 
   #box1 {
@@ -57,12 +59,14 @@
 
 
   @-webkit-keyframes slideshow {
-    0%    {  width: 50px; background: blue;}
-    100%  {  width: 100%; background: orange;}
+    0%    {  background: blue;}
+    80%  {  transform: translateX(500px);  background: orange;}
+    100%  {  transform: translateX(500px);  background: orange;}
   }
   @keyframes slideshow {
-    0%    {  width: 50px; background: blue;}
-    100%  {  width: 100%; background: orange;}
+    0%    {  background: blue;}
+    80%  {  transform: translateX(500px);  background: orange; }
+    100%  {  transform: translateX(500px);  background: orange; }
   }
 
   </style>
