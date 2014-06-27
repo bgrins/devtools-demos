@@ -13,7 +13,8 @@ iframe { min-height: 500px;}
   <script type="text/javascript">
       var iframe = document.createElement('iframe');
       document.body.appendChild(iframe);
-      iframe.src = "mutations.html"
+      iframe.src = "mutations.html";
+      var anchorNum = 0;
 
       document.addEventListener("DOMContentLoaded", function() {
         var iframe = document.createElement('iframe');
@@ -29,7 +30,8 @@ iframe { min-height: 500px;}
 
       document.querySelector("#add").addEventListener("click", function() {
         var iframe = document.createElement('iframe');
-        iframe.src = "edithtml.html"
+        anchorNum++;
+        iframe.src = "edithtml.html#" + anchorNum;
         document.body.appendChild(iframe);
       });
 
