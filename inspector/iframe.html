@@ -4,6 +4,9 @@
 <p>
   Inspecting iframes that have been added to the page in a variety of ways.
 </p>
+<button id="add">Add Iframe :)</button>
+<button id="remove">Remove Iframe :(</button>
+<hr />
 <style type='text/css'>
 iframe { min-height: 500px;}
 </style>
@@ -22,6 +25,18 @@ iframe { min-height: 500px;}
         var iframe = document.createElement('iframe');
         document.body.appendChild(iframe);
         iframe.src = "shadowdom.html"
+      });
+
+      document.querySelector("#add").addEventListener("click", function() {
+        var iframe = document.createElement('iframe');
+        iframe.src = "edithtml.html"
+        document.body.appendChild(iframe);
+      });
+
+      document.querySelector("#remove").addEventListener("click", function() {
+        var iframes = document.querySelectorAll("iframe");
+        var lastIframe = iframes[iframes.length - 1];
+        lastIframe.parentNode.removeChild(lastIframe);
       });
   </script>
   <iframe src="nested-iframe.html"></iframe>
