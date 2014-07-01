@@ -69,6 +69,10 @@ p:first-letter {
     margin-left: -16px;
 }
 
+.topleft {
+
+}
+
 .topleft:before {
     top:0;
     left:0;
@@ -100,7 +104,8 @@ p:first-letter {
 
 <div id="first">This element is wrapped by pseudo elements</div>
 
-<button>Toggle all styles</button>
+<button id="toggle-all">Toggle all styles</button>
+<button id="toggle-single">Toggle single style</button>
 <br />
 <div id="topleft" class="box topleft">
     <p>Top Left<br />Position</p>
@@ -120,12 +125,25 @@ p:first-letter {
 
 <script>
 var nextStyle = "";
-document.querySelector("button").addEventListener("click", function() {
+document.querySelector("#toggle-all").addEventListener("click", function() {
     var style = document.querySelector("style");
     var f = style.innerHTML;
     style.innerHTML = nextStyle;
     nextStyle = f;
 });
+
+var singleAdded = false;
+document.querySelector("#toggle-single").addEventListener("click", function() {
+    if (singleAdded) {
+        document.styleSheets[1].deleteRule(document.styleSheets[1].cssRules.length - 1);
+    } else {
+
+    document.styleSheets[1].insertRule("h1:before { content: 'new'; }", document.styleSheets[1].cssRules.length);
+    }
+    singleAdded = !singleAdded;
+});
+
+
 </script>
 
 </body></html>
