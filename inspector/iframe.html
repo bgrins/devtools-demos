@@ -6,6 +6,7 @@
 </p>
 <button id="add">Add Iframe :)</button>
 <button id="remove">Remove Iframe :(</button>
+<button id="reload">Reload all frames</button>
 <hr />
 <style type='text/css'>
 iframe { min-height: 500px;}
@@ -39,6 +40,13 @@ iframe { min-height: 500px;}
         var iframes = document.querySelectorAll("iframe");
         var lastIframe = iframes[iframes.length - 1];
         lastIframe.parentNode.removeChild(lastIframe);
+      });
+
+      document.querySelector("#reload").addEventListener("click", function() {
+        var iframes = document.querySelectorAll("iframe");
+        [].forEach.call(iframes, function(iframe) {
+          iframe.contentWindow.location.reload();
+        });
       });
   </script>
   <iframe src="nested-iframe.html"></iframe>
