@@ -8,6 +8,10 @@
   content: " after ";
 }
 
+h1:hover {
+    color: red;
+}
+
 body {
     color: #333;
 }
@@ -51,9 +55,11 @@ p:first-letter {
   font-size: 130%;
 }
 
-.box:before {
+.box::before,
+.foo:before,
+.box[foo="a::before"] {
     background: green;
-    content: " ";
+    content: "Be";
     font-family: Arial;
     position: absolute;
     height:32px;
@@ -106,6 +112,7 @@ p:first-letter {
 
 <h1>Pseudo Elements</h1>
 
+<!-- testing pseudo elements -->
 <div id="first">This element is wrapped by pseudo elements</div>
 
 <button id="toggle-all">Toggle all styles</button>
@@ -115,7 +122,7 @@ p:first-letter {
     <p>Top Left<br />Position</p>
 </div>
 
-<div id="topright" class="box topright">
+<div id="topright" class="box topright" foo="a">
     <p>Top Right<br />Position</p>
 </div>
 
@@ -126,6 +133,8 @@ p:first-letter {
 <div id="bottomleft" class="box bottomleft">
     <p>Bottom Left<br />Position</p>
 </div>
+
+<div class="box"></div>
 
 <script>
 var nextStyle = "";
