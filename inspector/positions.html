@@ -1,0 +1,231 @@
+<!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
+
+
+<h1>Positioning playground</h1>
+
+<p>
+  A demo of various positioning schemes: <a href="http://dev.w3.org/csswg/css-position/#pos-sch">http://dev.w3.org/csswg/css-position/#pos-sch</a>.
+</p>
+<style>
+.fixed { position: fixed; top: 80px; right: 20px;background: #ccf; }
+
+#absolute-container { position: relative; height: 50px; margin: 20px; }
+.absolute { position: absolute; top: 10px; left: 400px; background: #fcc; }
+
+.relative { position: relative; top: 10px; left: 10px; background: #cfc;}
+
+.static { position: static; top: 10px; left: 10px; background: #fcf; }
+
+#sticky-container {
+  margin: 50px;
+  height: 400px;
+  width: 400px;
+  padding: 40px;
+  overflow: scroll;
+}
+#sticky-container dl {
+    margin: 0;
+    padding: 24px 0 0 0;
+}
+
+#sticky-container dt {
+    background: #ffc;
+    border-bottom: 1px solid #989EA4;
+    border-top: 1px solid #717D85;
+    color: #FFF;
+    font: bold 18px/21px Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 2px 0 0 12px;
+    position: sticky;
+    width: 99%;
+    top: 0px;
+}
+
+#sticky-container dd {
+    font: bold 20px/45px Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0 0 0 12px;
+    white-space: nowrap;
+}
+
+#sticky-container dd + dd {
+    border-top: 1px solid #CCC
+}
+</style>
+absolute
+static
+fixed
+relative
+sticky
+
+
+<h2>Absoute positioning</h2>
+<div class="absolute">
+  Absolute child with no relative parent
+</div>
+<div id="absolute-container">
+  <div class="absolute">
+    Absolute child with a relative parent
+  </div>
+</div>
+
+<h2>Relative positioning</h2>
+<div id="relative-container">
+  <div class="relative">
+    Relative child
+  </div>
+</div>
+
+<h2>Fixed positioning</h2>
+<div id="fixed-container">
+  <div class="fixed">
+    Fixed child
+  </div>
+</div>
+
+<h2>Static positioning</h2>
+<div id="static-container">
+  <div class="static">
+    Static child
+  </div>
+</div>
+
+<h2>Sticky positioning</h2>
+<div id="sticky-container">
+  <div>
+      <dl>
+          <dt>A</dt>
+          <dd>Andrew W.K.</dd>
+          <dd>Apparat</dd>
+          <dd>Arcade Fire</dd>
+          <dd>At The Drive-In</dd>
+          <dd>Aziz Ansari</dd>
+      </dl>
+      <dl>
+          <dt>B</dt>
+          <dd>Battles</dd>
+          <dd>Biz Markie</dd>
+          <dd>The Black Keys</dd>
+          <dd>Blakroc</dd>
+          <dd>Broken Social Scene</dd>
+      </dl>
+      <dl>
+          <dt>C</dt>
+          <dd>Chromeo</dd>
+          <dd>Common</dd>
+          <dd>Converge</dd>
+          <dd>Crystal Castles</dd>
+          <dd>Cursive</dd>
+      </dl>
+      <dl>
+          <dt>D</dt>
+          <dd>Daft Punk</dd>
+          <dd>David Bazan</dd>
+          <dd>Death from Above 1979</dd>
+          <dd>Delorean</dd>
+      </dl>
+      <dl>
+          <dt>E</dt>
+          <dd>Explosions In The Sky</dd>
+      </dl>
+      <dl>
+          <dt>F</dt>
+          <dd>Fear Before The March Of Flames</dd>
+          <dd>The Fire Theft</dd>
+          <dd>Flight of the Conchords</dd>
+          <dd>Foo Fighters</dd>
+      </dl>
+      <dl>
+          <dt>G</dt>
+          <dd>The Get Up Kids</dd>
+          <dd>Girl Talk</dd>
+          <dd>godspeed you! black emperor</dd>
+          <dd>Guns N' Roses</dd>
+      </dl>
+      <dl>
+          <dt>H</dt>
+          <dd>Haddaway</dd>
+          <dd>Hot Chip</dd>
+          <dd>Hot Hot Heat</dd>
+      </dl>
+      <dl>
+          <dt>I</dt>
+          <dd>Immaculate Machine</dd>
+          <dd>Imogen Heap</dd>
+          <dd>Interpol</dd>
+      </dl>
+      <dl>
+          <dt>J</dt>
+          <dd>James Blake</dd>
+          <dd>Japandroids</dd>
+          <dd>Jimmy Eat World</dd>
+          <dd>The Juan MacLean</dd>
+      </dl>
+      <dl>
+          <dt>K</dt>
+          <dd>Kings Go Forth</dd>
+          <dd>Kings of Leon</dd>
+      </dl>
+      <dl>
+          <dt>L</dt>
+          <dd>Lady Sovereign</dd>
+          <dd>LCD Soundsystem</dd>
+          <dd>Lykke Li</dd>
+      </dl>
+      <dl>
+          <dt>M</dt>
+          <dd>M.I.A.</dd>
+          <dd>Madball</dd>
+          <dd>Major Lazer</dd>
+          <dd>Mount Kimbie</dd>
+      </dl>
+      <dl>
+          <dt>N</dt>
+          <dd>Neutral Milk Hotel</dd>
+          <dd>New Ruins</dd>
+          <dd>Nirvana</dd>
+      </dl>
+      <dl>
+          <dt>O</dt>
+          <dd>Of Montreal</dd>
+          <dd>Open Hand</dd>
+          <dd>Outkast</dd>
+      </dl>
+      <dl>
+          <dt>P</dt>
+          <dd>Parts and Labor</dd>
+          <dd>Pharoahe Monch</dd>
+          <dd>Pixies</dd>
+      </dl>
+      <dl>
+          <dt>R</dt>
+          <dd>Radiohead</dd>
+          <dd>Ratatat</dd>
+          <dd>RJD2</dd>
+          <dd>The Roots</dd>
+      </dl>
+      <dl>
+          <dt>S</dt>
+          <dd>Sam Cooke</dd>
+          <dd>Santigold</dd>
+          <dd>Shai Hulud</dd>
+          <dd>Sinai Beach</dd>
+          <dd>Sleigh Bells</dd>
+          <dd>Small Sins</dd>
+          <dd>Snoop Dogg</dd>
+          <dd>Spoon</dd>
+          <dd>Stars</dd>
+          <dd>Strongarm</dd>
+          <dd>Sunny Day Real Estate</dd>
+      </dl>
+      <dl>
+          <dt>T</dt>
+          <dd>Ted Leo & The Pharmacists</dd>
+          <dd>T-Pain</dd>
+          <dd>Thrice</dd>
+          <dd>TV On The Radio</dd>
+          <dd>Two Gallants</dd>
+      </dl>
+  </div>
+</div>
+</body></html>
