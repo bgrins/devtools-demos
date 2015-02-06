@@ -335,7 +335,7 @@ window.sendMessageToWorker = function()
         req.open('GET', 'http://www.mozilla.org/', true);
         req.onreadystatechange = function() {
           if (req.readyState == 4) {
-            console.log("XHR done");
+            console.log("XHR done\n\n: " + req.readyState);
           }
         };
         req.send(null);
@@ -348,7 +348,7 @@ window.sendMessageToWorker = function()
       req.open('GET', 'http://www.mozilla.org/', true);
       req.onreadystatechange = function() {
         if (req.readyState == 4) {
-          console.log("XHR done");
+          console.log("XHR done\n\n: " + req.readyState);
           xhrException();
           console.log("XHR - should not execute!");
         }
