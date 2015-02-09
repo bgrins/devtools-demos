@@ -1,20 +1,19 @@
 <!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
 
-
-<h1>Positioning playground</h1>
-
-<p>
-  A demo of various positioning schemes: <a href="http://dev.w3.org/csswg/css-position/#pos-sch">http://dev.w3.org/csswg/css-position/#pos-sch</a>.
-</p>
 <style>
 .fixed { position: fixed; top: 40px; right: 20px; margin-top: 20px; background: #ccf; }
+.fixed-bottom-right { position: fixed; bottom: 4em; right: 25%; margin: 20px; background: #ccf; }
 
-#absolute-container { position: relative; height: 50px; margin: 20px; }
-.absolute { position: absolute; top: 10px; left: 400px; background: #fcc; }
+#absolute-container { position: relative; height: 150px; margin: 20px; }
+.absolute { position: absolute; top: 20px; left: 400px; background: #fcc; }
+.absolute-bottom-right { position: absolute; bottom: 20px; right: 50px; background: #fcc; }
+.absolute-all-4 { position: absolute; top: 100px; bottom: 10px; left: 20px; right: 700px; background: #fcc; }
+.absolute-negative { position: absolute; bottom: -25px; background: #fcc; }
 
 .relative { position: relative; top: 10px; left: 10px; background: #cfc;}
 
 .static { position: static; top: 10px; left: 10px; background: #fcf; }
+.static-size { position: static; top: 10px; left: 10px; width: 300px; height: 100px; background: #fcf; }
 
 #sticky-container {
   margin: 50px;
@@ -52,20 +51,27 @@
     border-top: 1px solid #CCC
 }
 </style>
-absolute
-static
-fixed
-relative
-sticky
 
+<h1>Positioning playground</h1>
+<p>A demo of various positioning schemes: <a href="http://dev.w3.org/csswg/css-position/#pos-sch">http://dev.w3.org/csswg/css-position/#pos-sch</a>.</p>
+<p>absolute, static, fixed, relative, sticky</p>
 
-<h2>Absoute positioning</h2>
+<h2>Absolute positioning</h2>
 <div class="absolute">
   Absolute child with no relative parent
 </div>
 <div id="absolute-container">
   <div class="absolute">
     Absolute child with a relative parent
+  </div>
+  <div class="absolute-bottom-right">
+    Absolute child with a relative parent, positioned from the bottom right
+  </div>
+  <div class="absolute-all-4">
+    Absolute child with a relative parent, with all 4 positions
+  </div>
+  <div class="absolute-negative">
+    Absolute child with a relative parent, with negative positions
   </div>
 </div>
 
@@ -74,6 +80,11 @@ sticky
   <div class="relative">
     Relative child
   </div>
+  <div style="position:relative;">
+    <div class="relative">
+      Relative child, in a positioned parent
+    </div>
+  </div>
 </div>
 
 <h2>Fixed positioning</h2>
@@ -81,12 +92,18 @@ sticky
   <div class="fixed">
     Fixed child
   </div>
+  <div class="fixed-bottom-right">
+    Fixed child, bottom right
+  </div>
 </div>
 
 <h2>Static positioning</h2>
 <div id="static-container">
   <div class="static">
-    Static child
+    Static child with no width/height
+  </div>
+  <div class="static-size">
+    Static child with width/height
   </div>
 </div>
 
