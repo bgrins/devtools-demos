@@ -58,7 +58,6 @@ fixed
 relative
 sticky
 
-
 <h2>Absoute positioning</h2>
 <div class="absolute">
   Absolute child with no relative parent
@@ -72,7 +71,12 @@ sticky
 <h2>Relative positioning</h2>
 <div id="relative-container">
   <div class="relative">
-    Relative child
+    Relative child with no positioned parent
+  </div>
+  <div style="position:relative;">
+    <div class="relative">
+      Relative child with a positioned parent
+    </div>
   </div>
 </div>
 
