@@ -7,6 +7,14 @@
     document.querySelector("h2.changing").setAttribute("data-count", current);
   }, 1000);
 </script>
+<style type='text/css'>
+  [data-count] {
+    color: red;
+  }
+  [data-count*='1'] {
+    background-color: green;
+  }
+</style>
 
 <h1>Markup Mutations in the Inspector</h1>
 
