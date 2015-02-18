@@ -12,6 +12,7 @@
 .absolute-width-margin { position: absolute; top: 20px; right: 20px; width: 150px; margin: 1em; padding: 10px; border: 2px solid red; box-sizing: border-box; background: #fcc; }
 
 .relative { position: relative; top: 10px; left: 10px; background: #cfc;}
+.relative-inline { position: relative; top: 10px; left: 10px; display: inline; background: #cfc;}
 
 .static { position: static; top: 10px; left: 10px; background: #fcf; }
 .static-size { position: static; top: 10px; left: 10px; width: 300px; height: 100px; background: #fcf; }
@@ -83,6 +84,11 @@
 <div id="relative-container">
   <div class="relative">
     Relative child
+  </div>
+  <div style="width: 100px;">
+  <div class="relative-inline">
+    Relative inline child, across multiple lines
+  </div>
   </div>
   <div style="position:relative;">
     <div class="relative">
