@@ -1,13 +1,39 @@
 <!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
 
 <h1>Scripts loaded in a variety of ways</h2>
+  <style>
+    body {
+      min-height: 4000px;
+      background: linear-gradient(to top, red, white);
+    }
+
+    #container {
+      height: 200px;
+      width: 200px;
+      outline: solid 1px red;
+      position: relative;
+    }
+  </style>
   <script src="external.js"></script>
+  <script src="jquery-2.1.3.min.js"></script>
   <script>
   var a = false;
   </script>
   <script type="text/javascript">
   var b = true;
+  var n = 0;
+  setInterval(function() {
+    n++;
+    $("#container").animate({
+      top: n + "px"
+    });
+    if (n > 3000) {
+      n = 0;
+    }
+  }, 20);
   </script>
+
+  <div id="container"></div>
 
 </body></html>
 
