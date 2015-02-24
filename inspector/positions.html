@@ -13,6 +13,8 @@
 
 .relative { position: relative; top: 10px; left: 10px; background: #cfc;}
 .relative-inline { position: relative; top: 10px; left: 10px; display: inline; background: #cfc;}
+.relative-bottom-right { position: relative; bottom: -50px; right: -50px; width: 50%; background: #cfc; border: solid 1px; }
+.relative-all { position: relative; top: 10px; left: 10px; bottom: 50px; right: 50px; width: 50%; background: #cfc; border: solid 1px; }
 
 .static { position: static; top: 10px; left: 10px; background: #fcf; }
 .static-size { position: static; top: 10px; left: 10px; width: 300px; height: 100px; background: #fcf; }
@@ -84,6 +86,12 @@
 <div id="relative-container">
   <div class="relative">
     Relative child
+  </div>
+  <div class="relative-all">
+    Relative child with all positions set
+  </div>
+  <div class="relative-bottom-right">
+    Relative child with all bottom and right positions set
   </div>
   <div style="width: 100px;">
   <div class="relative-inline">
