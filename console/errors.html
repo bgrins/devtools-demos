@@ -1,0 +1,71 @@
+<!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
+
+  <h2>Console Errors</h2>
+  <p>Click the buttons below to generate some errors</p>
+
+  <button id="generateAsyncError">generate async error</button>
+  <button id="generateError">generate more errors</button>
+
+  <pre id="stack"></pre>
+
+  <script>
+
+  function a() { b() }
+  function b() { c() }
+  function c() { setTimeout(d, 1) }
+  function d() { e() }
+  function e() { f() }
+  function f() { setTimeout(g, 1) }
+  function g() { h() }
+  function h() { i() }
+  function i() {
+    var error = Error("Async uncaught exception");
+    document.getElementById("stack").textContent = "Async call stack: " + error.stack;
+    console.error("Error in console.error", error);
+    console.log("Error in console.log", error);
+  }
+
+  document.querySelector("#generateAsyncError").onclick = function() { a(); }
+
+  </script>
+
+  <script>
+
+  var foobarObject = { };
+  var btnGenerateError = document.querySelector("#generateError");
+  btnGenerateError.addEventListener("click", function(ev) {
+    try {
+      var foo1 = document.querySelector("div:foobar:zoo() !@#");
+    } catch (ex) {
+      window.lastDOMException = ex;
+    }
+    var foo2 = document.querySelector("div:foobar:zoo() !@#");
+  });
+  btnGenerateError.addEventListener("click", function(ev) {
+    document.body.childNodes[1000];
+    if (ev.preventBubble) {
+      ev.preventBubble();
+    }
+    try {
+      function lolz() {
+        foobarObject.intern(window);
+      }
+      function lolz2() {
+        lolz();
+      }
+      lolz2();
+    } catch (ex) {
+      window.lastException = ex;
+    }
+    foobarObject.intern(document.body);
+  }, false);
+
+  btnGenerateError.addEventListener('click', function (ev) {
+    console.log("blazblaz", btnGenerateError.getBoundingClientRect());
+    console.count("foocount");
+    ev.preventBubble();
+    foo.bar.extern();
+  }, false);
+
+  </script>
+</body></html>
