@@ -1,12 +1,5 @@
 <!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
 
-<script>
-  var current = 1;
-  var interval = setInterval(function() {
-    document.querySelector("h2 span").textContent = current++;
-    document.querySelector("h2.changing").setAttribute("data-count", current);
-  }, 1000);
-</script>
 <style type='text/css'>
   [data-count] {
     color: red;
@@ -24,6 +17,41 @@
 
 <h2>Number of seconds since loading: <span /></h2>
 <h2 class="changing">Changing attribute</h2>
+
+
+
+<div id="toofast">
+  This has an attribute that changes too fast for the server to keep up.
+  Press this <button>button</button> to toggle changes
+</div>
+
+<script>
+  var current = 1;
+  var interval = setInterval(function() {
+    document.querySelector("h2 span").textContent = current++;
+    document.querySelector("h2.changing").setAttribute("data-count", current);
+  }, 1000);
+
+  document.querySelector("#toofast button").onclick = toggleTooFast;
+
+  var toofastRunning = false;
+  function toggleTooFast() {
+    var toofast = 0;
+    clearInterval(window.fastInterval);
+
+    if (!toofastRunning) {
+      window.fastInterval = setInterval(function() {
+        for (var i = 0; i < 1000; i++) {
+          document.querySelector("#toofast").setAttribute("data-toofast", toofast++);
+        }
+      }, 1000);
+    }
+
+    toofastRunning = !toofastRunning;
+  }
+
+  toggleTooFast();
+</script>
 
 </body>
 </html>
