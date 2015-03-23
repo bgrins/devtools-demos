@@ -27,9 +27,10 @@
 
 <script>
   var current = 1;
+  var changingH2 = document.querySelector("h2.changing");
   var interval = setInterval(function() {
     document.querySelector("h2 span").textContent = current++;
-    document.querySelector("h2.changing").setAttribute("data-count", current);
+    changingH2.setAttribute("data-count", current);
   }, 1000);
 
   document.querySelector("#toofast button").onclick = toggleTooFast;
@@ -41,7 +42,7 @@
 
     if (!toofastRunning) {
       window.fastInterval = setInterval(function() {
-        for (var i = 0; i < 100; i++) {
+        for (var i = 0; i < 750; i++) {
           document.querySelector("#toofast").setAttribute("data-toofast", toofast++);
         }
       }, 750);
@@ -51,6 +52,14 @@
   }
 
   toggleTooFast();
+
+  changingH2.setAttribute("updated", "in function");
+  setTimeout(function() {
+    changingH2.setAttribute("updated", "in timeout 1");
+  }, 200);
+  setTimeout(function() {
+    changingH2.setAttribute("updated", "in timeout 2");
+  }, 750);
 </script>
 
 </body>
