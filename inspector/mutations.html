@@ -41,10 +41,10 @@
 
     if (!toofastRunning) {
       window.fastInterval = setInterval(function() {
-        for (var i = 0; i < 1000; i++) {
+        for (var i = 0; i < 100; i++) {
           document.querySelector("#toofast").setAttribute("data-toofast", toofast++);
         }
-      }, 1000);
+      }, 750);
     }
 
     toofastRunning = !toofastRunning;
