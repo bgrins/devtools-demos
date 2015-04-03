@@ -1,0 +1,51 @@
+<!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
+
+<style type="text/css">
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+.thing {
+  position: absolute;
+  width: 10vmin;
+  height: 10vmin;
+  border-radius: 50%;
+  background: rgb(187, 204, 170);
+}
+
+</style>
+
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+<script>
+var viewportW = document.body.offsetWidth;
+var viewportH = document.body.offsetHeight;
+
+// Creating a bunch of elements.
+for (var i = 0; i < (Math.random() * 100) + 50; i ++) {
+  var el = document.createElement("div");
+  el.classList.add("thing");
+  document.body.appendChild(el);
+
+  // Position randomly.
+  el.style.left = (Math.random() * viewportW) + "px";
+  el.style.top = (Math.random() * viewportH) + "px";
+
+  // Move randomly.
+  var deltaX = (Math.round(Math.random()) ? 1 : -1) * Math.random() * 200;
+  var deltaY = (Math.round(Math.random()) ? 1 : -1) * Math.random() * 200;
+
+  $(el).animate({
+    left: "+=" + deltaX + "vmin",
+    top: "+=" + deltaY + "vmin",
+  }, {
+    duration: 5000
+  });
+}
+</script>
+
+</body></html>
