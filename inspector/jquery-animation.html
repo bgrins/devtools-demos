@@ -23,11 +23,11 @@ body {
 <h1>jQuery Animations</h1>
 <button>Replay</button>
 <div id="container"></div>
-<script src="../shared/jquery-1.10.2.js"></script>
+<script src="../shared/jquery-1.11.2.min.js"></script>
 
 <script>
 
-document.querySelector("button").addEventListener("click", doAnimations);
+$("button").click(doAnimations);
 
 function doAnimations() {
 
