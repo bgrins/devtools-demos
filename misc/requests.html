@@ -20,13 +20,13 @@
 //var IMAGE_URI = "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20id%3D%22heart-icon%22%20d%3D%22M16%2C28.261c0%2C0-14-7.926-14-17.046c0-9.356%2C13.159-10.399%2C14-0.454c1.011-9.938%2C14-8.903%2C14%2C0.454%0A%20%20C30%2C20.335%2C16%2C28.261%2C16%2C28.261z%22%3E%3C%2Fpath%3E%0A%3C%2Fsvg%3E";
 var IMAGE_URI = "../inspector/heart.svg";
 
-var start = new Date();
 
 window.onload = function() {
 	var arr = [];
 	for (var i = 0; i < 750; i++) {
 		arr.push(i);
 	}
+	var start = new Date();
 	var numLoaded = 0;
 
 	arr.forEach(function(i) {
@@ -39,7 +39,7 @@ window.onload = function() {
 			img.src = IMAGE_URI + "?" + i;
 			img.onload = function() {
 				numLoaded++;
-				document.querySelector("#loadstatus").textContent = "Progress: loaded " + (i + 1) + " out of " + arr.length;
+				document.querySelector("#loadstatus").textContent = "Progress: loaded " + numLoaded + " out of " + arr.length;
 				if (numLoaded === arr.length) {
 					var end = new Date();
 					document.querySelector("#time").textContent  = "All loads took " + (end - start) + " ms";
