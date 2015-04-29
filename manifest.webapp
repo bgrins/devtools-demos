@@ -12,12 +12,6 @@
     "name": "Brian Grinstead",
     "url": "https://bgrins.github.io/devtools-demos/"
   },
-  "type": "privileged",
-  "permissions": {
-    "systemXHR": {
-      "description": "Required to load remote content"
-    }
-  },
   "installs_allowed_from": [
     "*"
   ]
