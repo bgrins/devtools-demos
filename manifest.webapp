@@ -1,0 +1,24 @@
+{
+  "name": "devtools-demos",
+  "description": "A quick way to test out or show off features within DevTools",
+  "launch_path": "/index.html",
+  "icons": {
+    "16": "inspector/heart.svg",
+    "48": "inspector/heart.svg",
+    "60": "inspector/heart.svg",
+    "128": "inspector/heart.svg"
+  },
+  "developer": {
+    "name": "Brian Grinstead",
+    "url": "https://bgrins.github.io/devtools-demos/"
+  },
+  "type": "privileged",
+  "permissions": {
+    "systemXHR": {
+      "description": "Required to load remote content"
+    }
+  },
+  "installs_allowed_from": [
+    "*"
+  ]
+}
