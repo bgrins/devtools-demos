@@ -1,0 +1,49 @@
+<!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
+
+  <h2>Console Stress test</h2>
+  <p>Click the buttons below to spam the console</p>
+
+  <button id="do-logs">LOL (Lots Of Logs)</button>
+
+  <ol id="logs"></ol>
+
+  <style type="text/css">body { min-height: 2000px; }</style>
+
+  <script>
+
+  var i = 0;
+  document.querySelector("#do-logs").onclick = function() {
+    var results = [];
+    for (i = 0; i < 10000; i++) {
+      var startTime = performance.now();
+      a();
+      if (i % 2) {
+        window.scrollTo(0, 1000);
+      } else {
+        window.scrollTo(0, 0);
+      }
+      var endTime = performance.now();
+      results.push(endTime - startTime);
+    }
+
+    var logs = document.querySelector("#logs");
+    results.forEach(function(result) {
+      var li = document.createElement("li");
+      li.textContent = result.toFixed(4) + "milliseconds";
+      logs.appendChild(li);
+    });
+  }
+
+  function a() { b() }
+  function b() { c() }
+  function c() { d() }
+  function d() { e() }
+  function e() { f() }
+  function f() { g() }
+  function g() { h() }
+  function h() {
+    console.log("Log number -> ", i);
+  }
+  </script>
+
+</body></html>
