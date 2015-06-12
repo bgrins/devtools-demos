@@ -19,10 +19,23 @@
 
 <h2>Shadow DOM 1</h2>
 <button>Hello World</button>
+
+
+<div id="example2">Hello World</div>
+
+
+
 <script>
 host = document.querySelector("button");
 var root = host.createShadowRoot();
 root.textContent = 'Goodbye World';
+
+
+var container = document.querySelector('#example2');
+var root1 = container.createShadowRoot();
+var root2 = container.createShadowRoot();
+root1.innerHTML = '<content></content><div>Root 1 FTW</div>';
+root2.innerHTML = '<div>Root 2 FTW</div><shadow></shadow>';
 </script>
 
 
