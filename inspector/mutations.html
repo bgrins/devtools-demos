@@ -15,7 +15,7 @@
   Viewing and editing content in the markup view and style inspector while it is changing can be tricky.
 </p>
 
-<h2>Number of seconds since loading: <span /></h2>
+<h2>Number of seconds since loading: <span> </span></h2>
 <h2 class="changing">Changing attribute</h2>
 
 
@@ -29,7 +29,7 @@
   var current = 1;
   var changingH2 = document.querySelector("h2.changing");
   var interval = setInterval(function() {
-    document.querySelector("h2 span").textContent = current++;
+    document.querySelector("h2 span").childNodes[0].nodeValue = current++;
     changingH2.setAttribute("data-count", current);
   }, 1000);
 
