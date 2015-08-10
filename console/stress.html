@@ -13,6 +13,7 @@
 
   var i = 0;
   document.querySelector("#do-logs").onclick = function() {
+    var totalStartTime = performance.now();
     var results = [];
     for (i = 0; i < 10000; i++) {
       var startTime = performance.now();
@@ -25,6 +26,9 @@
       var endTime = performance.now();
       results.push(endTime - startTime);
     }
+
+    var totalEndTime = performance.now();
+    console.log("Total time: " + (totalEndTime - totalStartTime));
 
     var logs = document.querySelector("#logs");
     results.forEach(function(result) {
