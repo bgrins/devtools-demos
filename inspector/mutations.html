@@ -25,10 +25,11 @@
   Press this <button>button</button> to toggle changes
 </div>
 
-<script>
+<script type="text/javascript">
   var current = 1;
   var changingH2 = document.querySelector("h2.changing");
   var interval = setInterval(function() {
+    var foo = 1;
     document.querySelector("h2 span").childNodes[0].nodeValue = current++;
     changingH2.setAttribute("data-count", current);
   }, 1000);
