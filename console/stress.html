@@ -46,7 +46,9 @@
   function f() { g() }
   function g() { h() }
   function h() {
-    console.log("Log number -> ", i);
+    var foo = { bar: { baz: true }};
+    foo[i] = i;
+    console.log("Log number -> ", i, foo);
   }
   </script>
 
