@@ -5,6 +5,7 @@
 
   <button id="generateAsyncError">generate async error</button>
   <button id="generateError">generate more errors</button>
+  <button id="generateErrorDeep">generate deep stack error</button>
 
   <pre id="stack"></pre>
 
@@ -66,6 +67,21 @@
     ev.preventBubble();
     foo.bar.extern();
   }, false);
+
+  var btnGenerateErrorDeep = document.querySelector("#generateErrorDeep");
+  console.log(btnGenerateErrorDeep);
+  btnGenerateErrorDeep.addEventListener("click", function(ev) {
+    function a() { b() }
+    function b() { c() }
+    function c() { d() }
+    function d() { e() }
+    function e() { f() }
+    function f() { g() }
+    function g() { h() }
+    function h() { throw new Error("hi there"); }
+
+    a();
+  });
 
   </script>
 </body></html>

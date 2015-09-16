@@ -15,3 +15,8 @@ function baz(x, y) {
   var z = 10;
   return x + y + z;
 }
+
+console.log("Calling functions from external scripts");
+foo(1,2);
+bar(1,2);
+baz(1,2);
