@@ -1,21 +1,22 @@
 <!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
 
 <style type="text/css">
-	#log {
-		min-height: 200px;
-		border: solid 1px #aaa;
-		padding: 5px;
-	}
-	#log::before {
-		content: "Log:";
-		display: block;
-	}
+  #log {
+    min-height: 200px;
+    border: solid 1px #aaa;
+    padding: 5px;
+  }
+  #log::before {
+    content: "Log:";
+    display: block;
+  }
 </style>
 
 <h1>Web Worker test page</h1>
 
 <button id="hello">Say hello</button>
 <button id="new-worker">Create a new worker</button>
+<button id="new-destroy-worker">Create and destroy a new worker</button>
 <button id="clear">Clear log</button>
 
 <pre id="log"></pre>
@@ -25,6 +26,7 @@ console.log("Hello from page");
 
 var log = document.querySelector("#log");
 var newWorkerButton = document.querySelector("#new-worker");
+var newDestroyWorkerButton = document.querySelector("#new-destroy-worker");
 var clearButton = document.querySelector("#clear");
 var helloButton = document.querySelector("#hello");
 var workerIndex = 0;
@@ -36,28 +38,40 @@ function addMessageToLog(msg) {
 var workers = [];
 var helloWorker = new Worker("hello-worker.js?" + workers.length);
 helloWorker.addEventListener('message', function (e) {
-  addMessageToLog("First worker: " + e.data.text);
+  addMessageToLog("Worker # " + workers.indexOf(helloWorker) + ": " + e.data.text);
 });
 
 workers.push(helloWorker);
 
 helloButton.addEventListener("click", function() {
-	helloWorker.postMessage({
-		type: "ping"
-	});
+  helloWorker.postMessage({
+    type: "ping"
+  });
 });
 clearButton.addEventListener("click", function() {
   log.textContent = "";
 });
 newWorkerButton.addEventListener("click", function() {
-	var newWorker = new Worker("hello-worker.js?" + workers.length);
-	workers.push(newWorker);
-	newWorker.addEventListener('message', function (e) {
-  	addMessageToLog("New worker: " + e.data.text);
-	});
-	newWorker.postMessage({
-		type: "ping"
-	});
+  var newWorker = new Worker("hello-worker.js?" + workers.length);
+  workers.push(newWorker);
+  newWorker.addEventListener('message', function (e) {
+    addMessageToLog("Worker # " + workers.indexOf(newWorker) + ": " + e.data.text);
+  });
+  newWorker.postMessage({
+    type: "ping"
+  });
+});
+
+newDestroyWorkerButton.addEventListener("click", function() {
+  var newWorker = new Worker("hello-worker.js?" + workers.length);
+  workers.push(newWorker);
+  newWorker.addEventListener('message', function (e) {
+    addMessageToLog("Worker # " + workers.indexOf(newWorker) + ": " + e.data.text);
+    newWorker.terminate();
+  });
+  newWorker.postMessage({
+    type: "ping"
+  });
 });
 
 </script>
