@@ -7,46 +7,50 @@ var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
 var API_KEY = 'AIzaSyATs7ORhZVUA2vPTizpYgVf1cgjNos7ajg';
 var GCM_ENDPOINT = 'https://android.googleapis.com/gcm/send';
 
-function checkSW(){
+function checkSW() {
   writeLog('checking service worker');
+
   if (typeof registration === 'undefined'){
     writeLog('service worker registration is undefined');
     return;
   }
+
   if (registration.installing) {
     writeLog('Service worker installing');
-  } else if(registration.waiting) {
+  }
+
+  if(registration.waiting) {
     writeLog('Service worker is waiting');
   }
+
   if (registration.active) {
     writeLog('Service worker active');
-  }else{
+  } else {
     writeLog('service worker NOT active');
   }
 }
 
 function unregSW(){
+  writeLog('unregistering service worker');
   registration.unregister().then(function(boolean) {
-    writeLog('reg.unregister() returned: '+ boolean);
+    writeLog('unregistering returned: ' + boolean);
   });
 }
 
-function regSW(){
-  writeLog('regSW');
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js').then(function(reg) {
-        registration = reg;
-        checkSW(reg);
-      }).catch(function(error) {
-        // registration failed
-        console.log('Registration failed: ' + error);
-      });
-    }
+function regSW() {
+  writeLog('registering new service worker');
+  navigator.serviceWorker.register('service-worker.js').then(function(reg) {
+    registration = reg;
+    checkSW(reg);
+  }).catch(function(error) {
+    writeLog('registering failed: ' + error);
+    console.log('Registration failed: ' + error);
+  });
 }
 
 function subscribe(){
   navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
-    // Do we already have a push message subscription?  
+    // Do we already have a push message subscription?
     serviceWorkerRegistration.pushManager.subscribe({userVisibleOnly: true})
     .then(function(subscription) {
         endpoint = subscription.endpoint;
