@@ -93,24 +93,10 @@ function doXhr() {
   post.send("push="+encodeURIComponent(endpoint));
 }
 
-function sendMail(){
+function sendMail() {
   window.location = "mailto:MYUSER@mozilla.com?subject=CURL_ME&body="+chrome_str;
 }
 
-function writeLog(txt){
+function writeLog(txt) {
   document.getElementById("log").innerHTML += txt + '<br>';
-}
-
-function checkEnv() {
-  if (!('serviceWorker' in navigator)) {
-    writeLog('Your Browser doesn\'t support ServiceWorkers');
-  }
-  if (!(window.PushManager)){
-    writeLog("Your Browser doesn't support Push");
-  }
-
-  if (true || window.location.hostname !== "localhost" &&
-      window.location.protocol !== "https:") {
-    writeLog("You need to be on https or localhost. Try <a href='https://bgrins.github.io/devtools-demos/worker/serviceworker.html'>this page</a>");
-  }
 }

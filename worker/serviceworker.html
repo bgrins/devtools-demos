@@ -2,7 +2,25 @@
 
 <h1>Service Worker test page</h1>
 
-<p>For the Notifications API, see the <a href="../misc/notifications.html">Notifications API test page</a>.</p>
+<p>
+  A test page for Service Workers and Push Notifications in the browser.<br />
+  <small>For the Notifications API, see the <a href="../misc/notifications.html">Notifications API test page</a>.</small>
+</p>
+
+<style>
+body.error {
+  transition: background 2s;
+  background: #faa;
+}
+#error-log {
+  font-size: 110%;
+  color: red;
+  font-weight: bold;
+}
+</style>
+<div id='error-log'>
+
+</div>
 
 <form class="pretty-form">
 <fieldset>
@@ -27,7 +45,26 @@
 
 <script src="serviceworker-page.js"></script>
 <script>
-checkEnv();
+// Make sure the browser / environment supports behavior needed
+// for the demo page, and make it obvious if not.
+(function checkBrowserSupport() {
+  function writeError(txt) {
+    document.getElementById("error-log").innerHTML += "Error: " + txt + '<br>';
+    document.body.classList.add("error");
+  }
+
+  if (!('serviceWorker' in navigator)) {
+    writeError('Your Browser doesn\'t support ServiceWorkers');
+  }
+  if (!('PushManager' in window)) {
+    writeError("Your Browser doesn't support Push");
+  }
+
+  if (window.location.hostname !== "localhost" &&
+      window.location.protocol !== "https:") {
+    writeError("You need to be on https or localhost. Try <a href='https://bgrins.github.io/devtools-demos/worker/serviceworker.html'>this page</a>");
+  }
+})();
 </script>
 
 </body></html>
