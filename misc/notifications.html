@@ -1,0 +1,90 @@
+<!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
+
+<h1>Notifications API</h1>
+<p>For the Push API, see the <a href="../worker/serviceworker.html">Push API / Service workers test page</a>.</p>
+
+<form class="pretty-form">
+<fieldset>
+  <legend>Create notification</legend>
+  <div>
+    <label>Text <input id='notification-text' value='Notification from browser'></input></label>
+  </div>
+
+  <div>
+    <label>After clicking, open link in:</label>
+    <label><input name="target" type="radio" checked="true" value="_blank" />New window</label>
+    <label><input name="target" type="radio" value="_self" />This tab</label>
+  </div>
+
+  <div>
+    <button type='button' onclick='sendNotification()'>Send Notification</button>
+    <button type='button' onclick='closeNotification()'>Close existing notification</button>
+  </div>
+</fieldset>
+</form>
+
+<hr />
+
+<div id="log"></div>
+
+<script>
+var notification;
+
+function getNotificationLinkTarget() {
+  var checked = document.querySelector("[name=target]:checked");
+  var target = checked && checked.value;
+  return target || "_blank";
+}
+
+function notify() {
+  writeLog('notification.onclick: window.open mozilla.org');
+  window.open('http://www.mozilla.org', getNotificationLinkTarget());
+}
+
+function getNotificationText() {
+  return document.querySelector("#notification-text").value;
+}
+function popNotification() {
+  notification = new Notification(getNotificationText());
+  notification.onclick = notify;
+}
+
+function sendNotification() {
+  // Let's check if the browser supports notifications
+  writeLog('Notification.permission: '+ Notification.permission);
+  if (!("Notification" in window)) {
+    alert("This browser does not support desktop notification");
+  }
+
+  // Let's check whether notification permissions have already been granted
+  else if (Notification.permission === "granted"  ) {
+    // If it's okay let's create a notification
+    popNotification();
+  }
+
+  // Otherwise, we need to ask the user for permission
+  else if (Notification.permission !== 'denied' || Notification.permission === "default") {
+    writeLog('requesting Notification Permission');
+    Notification.requestPermission(function (permission) {
+      // If the user accepts, let's create a notification
+      writeLog('Notification.permission: '+ Notification.permission);
+      if (permission === "granted") {
+        popNotification();
+      }
+    });
+  }
+}
+
+function closeNotification() {
+  if (notification) {
+    notification.close();
+  }
+}
+
+function writeLog(txt){
+  document.getElementById("log").innerHTML += txt + '<br>';
+}
+
+</script>
+
+</body></html>

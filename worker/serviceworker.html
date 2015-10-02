@@ -2,44 +2,28 @@
 
 <h1>Service Worker test page</h1>
 
-<h2>Notifications API</h2>
-<p>
-    This doesn't actually require a service worker, you can use it without initializing one below.
-</p>
+<p>For the Notifications API, see the <a href="../misc/notifications.html">Notifications API test page</a>.</p>
 
 <form class="pretty-form">
 <fieldset>
-  <legend>Create notification</legend>
-  <div>
-    <label>Text <input id='notification-text' value='Notification from browser'></input></label>
-  </div>
+  <legend>Push API</legend>
 
   <div>
-    <label>After clicking, open link in:</label>
-    <label><input name="target" type="radio" checked="true" value="_blank" />New window</label>
-    <label><input name="target" type="radio" value="_self" />This tab</label>
+    <button type="button" onclick='regSW()'>Init Service Worker</button>
+    <button type="button" onclick='checkSW(registration)'>Check Service Worker</button>
+    <button type="button" onclick='unregSW()'>Unregister Service Worker</button>
   </div>
-
   <div>
-    <button type='button' onclick='notifyMe()'>Send Notification</button>
-    <button type='button' onclick='closeNotification()'>Close existing notification</button>
+    <button type="button" onclick='subscribe()'>subscribe to push</button>
+  </div>
+  <div>
+    <button type="button" id='doXhr_btn' onclick='doXhr()' style="visibility:hidden">POST to push endpoint</button>
+    <button type="button" id='mailto_btn' onclick='sendMail()' style="visibility:hidden">mailto:CURL string</button>
   </div>
 </fieldset>
 </form>
-<p></p>
-<hr />
 
-
-<p>Push API</p>
-<button onclick='regSW()'>Init Service Worker</button><button onclick='checkSW(registration)'>Check Service Worker</button><button onclick='unregSW()'>Unregister Service Worker</button>
-<p></p>
-<button onclick='subscribe()'>subscribe to push</button>
-<p></p>
-<hr />
-<button id='doXhr_btn' onclick='doXhr()' style="visibility:hidden">POST to push endpoint</button><br />
-<button id='mailto_btn' onclick='sendMail()' style="visibility:hidden">mailto:CURL string</button>
-<p></p>
-<div id='demo'></div>
+<div id='log'></div>
 
 <script src="serviceworker-page.js"></script>
 <script>
