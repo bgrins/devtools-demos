@@ -19,3 +19,26 @@ header {
   font-size: 12px;
   margin-right: 5px;
 }
+
+.pretty-form {
+  margin: 2px 3px;
+  padding: 2px 5px;
+}
+
+.pretty-form fieldset {
+  margin: 0;
+  border: solid 1px rgba(0,0,0,.2);
+}
+
+.pretty-form fieldset > div {
+  margin: 8px 0;
+}
+
+.pretty-form input:not([type]),
+.pretty-form input[type=text] {
+  min-width: 200px;
+}
+
+.pretty-form label {
+  font-family: monospace;
+}
