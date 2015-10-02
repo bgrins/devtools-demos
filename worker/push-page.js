@@ -39,7 +39,7 @@ function unregSW(){
 
 function regSW() {
   writeLog('registering new service worker');
-  navigator.serviceWorker.register('service-worker.js').then(function(reg) {
+  navigator.serviceWorker.register('push-service-worker.js').then(function(reg) {
     registration = reg;
     checkSW(reg);
   }).catch(function(error) {
