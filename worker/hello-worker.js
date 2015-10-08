@@ -1,5 +1,5 @@
 
-console.log("Hello from worker");
+console.log("Hello from worker", this);
 
 addEventListener('message', function (e) {
   var msg = e.data;
