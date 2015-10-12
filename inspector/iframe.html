@@ -29,6 +29,12 @@ iframe { min-height: 500px;}
         iframe.src = "shadowdom.html"
       });
 
+      window.addEventListener("load", function() {
+        var iframe = document.createElement('iframe');
+        document.body.appendChild(iframe);
+        iframe.src = "../worker/webworker.html"
+      });
+
       document.querySelector("#add").addEventListener("click", function() {
         var iframe = document.createElement('iframe');
         anchorNum++;

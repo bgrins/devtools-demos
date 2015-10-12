@@ -22,7 +22,12 @@
 <pre id="log"></pre>
 
 <script>
-console.log("Hello from page");
+var foo = {
+  bar: function() {
+    console.log("Logging from " + window.location.toString())
+  }
+}
+console.log("Hello from page", this, foo);
 
 var log = document.querySelector("#log");
 var newWorkerButton = document.querySelector("#new-worker");

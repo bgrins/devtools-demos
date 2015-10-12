@@ -7,8 +7,10 @@ function dumpObj(object){
     if (object.hasOwnProperty(property)) {
         console.log('::' + property + ":" + object[property]);
     }
+  }
 }
-}
+
+console.log("ServiceWorker initialized", this);
 
 self.addEventListener('push', function(event) {
   console.log('Received a push message', event);
