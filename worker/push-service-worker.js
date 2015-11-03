@@ -1,5 +1,8 @@
 'use strict';
 
+console.log("Hello from ServiceWorker", this);
+importScripts("push-service-worker-import.js");
+
 function dumpObj(object){
   console.log(':dumpObj:');
   for (var property in object) {
@@ -10,7 +13,10 @@ function dumpObj(object){
   }
 }
 
-console.log("ServiceWorker initialized", this);
+setInterval(function() {
+  console.log("ServiceWorker ping");
+}, 10000);
+
 
 self.addEventListener('push', function(event) {
   console.log('Received a push message', event);
