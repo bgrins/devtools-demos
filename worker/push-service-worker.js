@@ -1,6 +1,6 @@
 'use strict';
 
-console.log("Hello from ServiceWorker", this);
+console.log("Hello from ServiceWorker at " + (new Date().toLocaleTimeString()), this);
 importScripts("push-service-worker-import.js");
 
 function dumpObj(object){
@@ -14,8 +14,8 @@ function dumpObj(object){
 }
 
 setInterval(function() {
-  console.log("ServiceWorker ping");
-}, 10000);
+  console.log("ServiceWorker ping at " + (new Date().toLocaleTimeString()));
+}, 9000);
 
 
 self.addEventListener('push', function(event) {

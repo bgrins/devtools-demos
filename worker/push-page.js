@@ -7,7 +7,7 @@ var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
 var API_KEY = 'AIzaSyATs7ORhZVUA2vPTizpYgVf1cgjNos7ajg';
 var GCM_ENDPOINT = 'https://android.googleapis.com/gcm/send';
 
-console.log("Hello from ServiceWorker page", this);
+console.log("Hello from ServiceWorker page at " + (new Date().toLocaleTimeString()), this);
 
 function checkSW() {
   writeLog('checking service worker');

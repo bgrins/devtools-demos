@@ -15,6 +15,7 @@
 <h1>Web Worker test page</h1>
 
 <button id="hello">Say hello</button>
+<button id="error">Throw error in worker</button>
 <button id="new-worker">Create a new worker</button>
 <button id="new-destroy-worker">Create and destroy a new worker</button>
 <button id="clear">Clear log</button>
@@ -34,6 +35,7 @@ var newWorkerButton = document.querySelector("#new-worker");
 var newDestroyWorkerButton = document.querySelector("#new-destroy-worker");
 var clearButton = document.querySelector("#clear");
 var helloButton = document.querySelector("#hello");
+var errorButton = document.querySelector("#error");
 var workerIndex = 0;
 
 function addMessageToLog(msg) {
@@ -51,6 +53,11 @@ workers.push(helloWorker);
 helloButton.addEventListener("click", function() {
   helloWorker.postMessage({
     type: "ping"
+  });
+});
+errorButton.addEventListener("click", function() {
+  helloWorker.postMessage({
+    type: "error"
   });
 });
 clearButton.addEventListener("click", function() {
