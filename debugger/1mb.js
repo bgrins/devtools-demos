@@ -2,6 +2,10 @@
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 
+// Don't actually want this to script to do anything, just
+// want a big ~1MB script.
+
+return;
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 
