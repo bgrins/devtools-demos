@@ -1,40 +1,50 @@
 <!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
 
-<h1>Scripts loaded in a variety of ways</h2>
-  <style>
-    body {
-      min-height: 4000px;
-      background: linear-gradient(to top, red, white);
-    }
+<h1>Scripts loaded in a variety of ways</h1>
 
-    #container {
-      height: 200px;
-      width: 200px;
-      outline: solid 1px red;
-      position: relative;
-    }
-  </style>
-  <script src="1mb.js"></script>
-  <script src="external.js"></script>
-  <script src="jquery-2.1.3.min.js"></script>
-  <script>
-  var a = false;
-  </script>
-  <script type="text/javascript">
-  var b = true;
-  var n = 0;
-  setInterval(function() {
+<p>This page has a variety of scripts, including a big script, inline scripts, onclick handlers, dynamically added scripts, etc.</p>
+
+<style>
+  #container {
+    height: 200px;
+    width: 80%;
+    margin: 0 auto;
+    outline: solid 1px red;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+<script src="1mb.js"></script>
+<script src="jquery-2.1.3.min.js"></script>
+<script type="text/javascript">
+var downwards = true;
+var n = 0;
+setInterval(function() {
+  if (!downwards) {
+    n--;
+  } else {
     n++;
-    $("#container").animate({
-      top: n + "px"
-    });
-    if (n > 3000) {
-      n = 0;
-    }
-  }, 20);
-  </script>
+  }
+  $("#container").css({
+    top: n + "px"
+  });
+  if (n > 3000 || n < 0) {
+    n = 0;
+  }
+}, 20);
 
-  <div id="container"></div>
+</script>
+
+<div id="container" onclick="downwards = !downwards">Click to toggle animation</div>
+
+<script>
+var a = false;
+var script = document.createElement("script");
+script.src = "external.js";
+document.body.appendChild(script);
+</script>
 
 </body></html>
 
