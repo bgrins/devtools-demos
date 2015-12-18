@@ -3,9 +3,13 @@
   <h2>Performance Measurement - CodeMirror</h2>
   <p>This page loads large amounts of text into an editor which causes jank.  Click one of the buttons below to try.</p>
 
+  <div class="pretty-form">
   <button id="load-1mb">Load 1MB of text</button>
   <button id="load-50mb">Load 50MB of text</button>
   <button id="load-100mb">Load 100MB of text</button>
+  <button id="load-0">Clear</button>
+  <label><input type="checkbox" id="oneline" /> All source on one line</label>
+  </div>
 
   <pre id="log"></pre>
   <div id="editor"></div>
@@ -22,14 +26,17 @@
 
     var mb = 1048576;
     var log = document.querySelector("#log");
+    var oneline = document.querySelector("#oneline");
     log.textContent = "Waiting to set text.  Click one of the buttons above.";
 
     function setValue(size) {
       log.textContent = "Busy setting the value...";
       console.time("Setting value");
 
+      var jsString = oneline.checked ? JS_STRING.replace(/\n/g, '') : JS_STRING;
+
       var start = performance.now();
-      var s = new Array(Math.round((size*mb) / JS_STRING.length)).join(JS_STRING);
+      var s = new Array(Math.round((size*mb) / jsString.length)).join(jsString);
       cm.setValue(s);
       var end = performance.now();
 
@@ -37,6 +44,9 @@
       log.textContent = "Finished setting the value.  Took " + (Math.round(end - start)) + "ms";
     }
 
+    document.querySelector("#load-0").onclick = function() {
+      setValue(0);
+    };
     document.querySelector("#load-1mb").onclick = function() {
       setValue(1);
     };
