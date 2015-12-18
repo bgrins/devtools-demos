@@ -1,0 +1,53 @@
+<!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
+
+  <h2>Performance Measurement - CodeMirror</h2>
+  <p>This page loads large amounts of text into an editor which causes jank.  Click one of the buttons below to try.</p>
+
+  <button id="load-1mb">Load 1MB of text</button>
+  <button id="load-50mb">Load 50MB of text</button>
+  <button id="load-100mb">Load 100MB of text</button>
+
+  <pre id="log"></pre>
+  <div id="editor"></div>
+
+  <link rel="stylesheet" href="codemirror.css">
+  <script src="codemirror.js"></script>
+  <script src="js-string.js"></script>
+  <style type="text/css">
+    #editor { border: solid 1px #ccc; }
+    #log { border: solid 1px #ccc; padding: 5px; }
+  </style>
+  <script>
+    var cm = CodeMirror(document.querySelector("#editor"), { });
+
+    var mb = 1048576;
+    var log = document.querySelector("#log");
+    log.textContent = "Waiting to set text.  Click one of the buttons above.";
+
+    function setValue(size) {
+      log.textContent = "Busy setting the value...";
+      console.time("Setting value");
+
+      var start = performance.now();
+      var s = new Array(Math.round((size*mb) / JS_STRING.length)).join(JS_STRING);
+      cm.setValue(s);
+      var end = performance.now();
+
+      console.timeEnd("Setting value");
+      log.textContent = "Finished setting the value.  Took " + (Math.round(end - start)) + "ms";
+    }
+
+    document.querySelector("#load-1mb").onclick = function() {
+      setValue(1);
+    };
+
+    document.querySelector("#load-50mb").onclick = function() {
+      setValue(50);
+    };
+
+    document.querySelector("#load-100mb").onclick = function() {
+      setValue(100);
+    };
+  </script>
+
+</body></html>
