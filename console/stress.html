@@ -4,6 +4,7 @@
   <p>Click the buttons below to spam the console</p>
 
   <button id="do-logs">LOL (Lots Of Logs)</button>
+  <button id="stream-logs">Streaming logs</button>
 
   <ol id="logs"></ol>
 
@@ -50,6 +51,45 @@
     foo[i] = i;
     console.log("Log number -> ", i, foo);
   }
+
+
+  var print = false;
+  document.querySelector("#stream-logs").onclick = function() {
+    print = !print;
+  }
+
+  function now() { return performance.now(); }
+
+  function test(fps) {
+      var interval = Math.floor(1000/fps);
+      var last = 0;
+      function cb() {
+        if (print) {
+          var start = now();
+          var since = start - last;
+
+          var s = "since last: " + since +
+              " wanted: " + interval + " time: " + start;
+          if (print) {
+              var elem = document.getElementById("logs");
+              elem.innerHTML =
+                  s + "<br>" + elem.innerHTML.substring(0, 10000);
+          }
+          console.log(s);
+          last = start;
+        }
+        requestAnimationFrame(cb);
+      }
+      cb();
+  }
+
+  window.addEventListener("keydown", function (evt) {
+      if (evt.keyCode == "T".charCodeAt(0)) print = !print;
+  });
+
+  test(32);
+
+
   </script>
 
 </body></html>
