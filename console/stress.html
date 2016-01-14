@@ -6,6 +6,7 @@
   <button id="do-logs">LOL (Lots Of Logs)</button>
   <button id="stream-logs">Streaming logs (Press 'T' key)</button>
 
+  <div id="streaming-info"></div>
   <ol id="logs"></ol>
 
   <style type="text/css">body { min-height: 2000px; }</style>
@@ -54,28 +55,32 @@
 
 
   var print = false;
+  var last = 0;
   document.querySelector("#stream-logs").onclick = function() {
     print = !print;
+    last = now();
   }
+  var streamingInfo = document.getElementById("streaming-info");
+  var logs = document.getElementById("logs");
+  var avgRAF = 0;
 
   function now() { return performance.now(); }
 
   function test(fps) {
       var interval = Math.floor(1000/fps);
-      var last = 0;
       function cb() {
         if (print) {
           var start = now();
           var since = start - last;
-
+          if (!avgRAF) { avgRAF = since; }
+          else { avgRAF = avgRAF * .99 + since * .01; }
           var s = "since last: " + since +
               " wanted: " + interval + " time: " + start;
-          if (print) {
-              var elem = document.getElementById("logs");
-              elem.innerHTML =
-                  s + "<br>" + elem.innerHTML.substring(0, 10000);
-          }
+          logs.innerHTML =
+              s + "<br>" + logs.innerHTML.substring(0, 10000);
           console.log(s);
+          streamingInfo.textContent = "rolling average from last 100 rAF: " +
+            Math.round(avgRAF) + "ms";
           last = start;
         }
         requestAnimationFrame(cb);
