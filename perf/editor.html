@@ -1,6 +1,6 @@
 <!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
 
-  <h2>Performance Measurement - CodeMirror</h2>
+  <h1>Performance Measurement - CodeMirror</h1>
   <p>This page loads large amounts of text into an editor which causes jank.  Click one of the buttons below to try.</p>
 
   <div class="pretty-form">
@@ -41,7 +41,7 @@
       var end = performance.now();
 
       console.timeEnd("Setting value");
-      log.textContent = "Finished setting the value.  Took " + (Math.round(end - start)) + "ms";
+      log.textContent = "Finished setting the value (" + size + "MB). Took " + (Math.round(end - start)) + "ms";
     }
 
     document.querySelector("#load-0").onclick = function() {
