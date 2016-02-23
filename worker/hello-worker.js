@@ -15,6 +15,14 @@ addEventListener('message', function (e) {
   }
 });
 
+let subWorker = new Worker("sub-worker.js");
+subWorker.addEventListener('message', function (e) {
+  console.log("Subworker has responeded to ping", e.data.type);
+});
+subWorker.postMessage({
+  type: "ping"
+});
+
 function throwError() {
   throw new Error("Worker threw an error :(")
 }

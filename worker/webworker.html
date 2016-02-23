@@ -40,8 +40,8 @@ var workerIndex = 0;
 
 function addMessageToLog(msg) {
   log.textContent = log.textContent + msg + "\n";
-
 }
+
 var workers = [];
 var helloWorker = new Worker("hello-worker.js?" + workers.length);
 helloWorker.addEventListener('message', function (e) {
