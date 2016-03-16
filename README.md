@@ -13,3 +13,10 @@ This template can be copied for adding new demos.  This will get a consistent st
     <!-- any more content -->
 
     </body></html>
+
+
+# Getting Setup
+
++ Install dependencies `npm install`
++ Running a local server `npm run static`
++ Running build environment, which lints with jshint `grunt`
