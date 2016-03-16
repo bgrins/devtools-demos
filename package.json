@@ -5,11 +5,15 @@
     "type": "git",
     "url": "git://github.com/bgrins/devtools-demos.git"
   },
+  "scripts": {
+    "static": "./node_modules/.bin/static"
+  },
   "description": "Demo and test cases for using DevTools",
   "author": "Brian Grinstead",
   "license": "MIT",
   "devDependencies": {
     "grunt": "~0.4.5",
+    "node-static": "0.7.7",
     "grunt-contrib-jshint": "^0.10.0"
   }
 }
