@@ -16,3 +16,4 @@
 
 # Manually installed node packages should be ignored
 /node_modules/
+npm-debug.log
