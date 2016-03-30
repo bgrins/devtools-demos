@@ -6,7 +6,7 @@
     "url": "git://github.com/bgrins/devtools-demos.git"
   },
   "scripts": {
-    "static": "./node_modules/.bin/static"
+    "start": "./node_modules/.bin/static"
   },
   "description": "Demo and test cases for using DevTools",
   "author": "Brian Grinstead",

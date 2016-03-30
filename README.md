@@ -1,6 +1,8 @@
 
 # DevTools Demos
 
+![](screenshots/devtools-demos.png)
+
 Just some demos for testing out or showing off various features in Developer Tools.
 
 This template can be copied for adding new demos.  This will get a consistent style and layout of other tests.  But it's not necessary.
@@ -18,5 +20,5 @@ This template can be copied for adding new demos.  This will get a consistent st
 # Getting Setup
 
 + Install dependencies `npm install`
-+ Running a local server `npm run static`
++ Running a local server `npm start`
 + Running build environment, which lints with jshint `grunt`
