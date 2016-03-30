@@ -86,7 +86,9 @@ self.addEventListener('notificationclick', function(event) {
 
 });
 
-self.addEventListener('install', function(event) { console.log('install event: ', event) });
+self.addEventListener('install', function(event) {
+  console.log('install event: ', event)
+});
 
 self.addEventListener('fetch', function(event) {
   console.log('Handling fetch event for', event.request.url);
