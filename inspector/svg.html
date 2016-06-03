@@ -8,6 +8,32 @@
 <path id="heart-icon" d="M16,28.261c0,0-14-7.926-14-17.046c0-9.356,13.159-10.399,14-0.454c1.011-9.938,14-8.903,14,0.454
   C30,20.335,16,28.261,16,28.261z"></path>
 </svg>
+
+
+<h2 id="image-states">Image states</h2>
+<p>
+  These external SVGs change styles based on the URL:
+</p>
+
+<img id="toggle-image-light" src="console-input.svg#light-theme" />
+<img id="toggle-image-dark" src="console-input.svg#dark-theme" />
+
+<p>Click the button to <button id="toggle">toggle active state</button></p>
+
+<script>
+  document.querySelector("#toggle").onclick = function() {
+    var lightImage = document.querySelector("#toggle-image-light");
+    var darkImage = document.querySelector("#toggle-image-dark");
+    if (lightImage.src.includes("focus")) {
+      lightImage.src = "console-input.svg#light-theme";
+      darkImage.src = "console-input.svg#dark-theme";
+    } else {
+      lightImage.src = "console-input.svg#light-theme-focus";
+      darkImage.src = "console-input.svg#dark-theme-focus";
+    }
+  };
+</script>
+
 <br />
 <img src="heart.svg" />
 <br />
@@ -18,5 +44,6 @@
 <svg viewBox="0 0 2 2" width=200 height=200>
   <circle cx=1 cy=1 r=1 fill=lime />
 </svg>
+
 
 </body></html>
