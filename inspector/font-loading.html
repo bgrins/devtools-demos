@@ -1,0 +1,27 @@
+<!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
+
+<h1>Font Loading</h1>
+
+<style type="text/css">
+@import url(https://fonts.googleapis.com/css?family=Oswald);
+
+.load-badly {
+  /* purposefully mispelled to force fallback */
+  font-family: 'Osswald', sans-serif;
+}
+
+.load-well {
+  font-family: 'Oswald', sans-serif;
+}
+
+</style>
+
+<p>
+  <pre style="display: inline">@font-face</pre> improperly loading a font file and properly loading a file for testing font fallback functionality in the Font panel.
+</p>
+
+<p class="load-badly">This paragraph should be in Oswald, but instead is using the system sans-serif.</p>
+
+<p class="load-well">This paragraph is in Oswald, instead of the sans-serif.</p>
+
+</body></html>
