@@ -41,9 +41,32 @@
 <p>
   This element has a mixed case attribute.  Editing the attributes in the inspector should preserve case (as the casing is important for rendering).
 </p>
-<svg viewBox="0 0 2 2" width=200 height=200>
+<svg viewBox="0 0 2 2" width=100 height=100>
   <circle cx=1 cy=1 r=1 fill=lime />
 </svg>
+
+
+
+<style>
+  #filler {
+    width: 20px;
+    height: 20px;
+    background-image: url("heart.svg");
+    background-image: url("alerticon-warning.png");
+    background-repeat: none;
+    background-size: contain;
+    filter: url("filters.svg#fill");
+    fill: green;
+  }
+</style>
+<p>
+  This element has a background-image using an SVG that uses fill from this page
+</p>
+<div id="filler"></div>
+
+<br />
+<br />
+<br />
 
 
 </body></html>
