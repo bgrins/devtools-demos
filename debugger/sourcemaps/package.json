@@ -1,0 +1,16 @@
+{
+  "name": "sourcemap-example",
+  "version": "0.0.1",
+  "license": "MPL-2.0",
+  "scripts": {
+    "build": "webpack"
+  },
+  "dependencies": {
+    "webpack": "1.13.1"
+  },
+  "files": [
+    "js",
+    "index.html",
+    "webpack.config.js"
+  ]
+}
