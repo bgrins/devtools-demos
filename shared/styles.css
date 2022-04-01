@@ -15,6 +15,13 @@ header {
   padding: 4px;
 }
 
+header h1 { /* home page uses this */
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  font-size: inherit;
+  font-weight: normal;
+}
 summary:hover, summary:focus {
   text-decoration: none; /* override water.css */
 }
