@@ -4,7 +4,8 @@ body {
   max-width: initial;
   padding: 0 10px;
   margin: 0;
-  font-family: "Lucida Sans Typewriter", "Lucida Console", Monaco, "Bitstream Vera Sans Mono", monospace;
+  font-family: "Lucida Sans Typewriter", "Lucida Console", Monaco,
+    "Bitstream Vera Sans Mono", monospace;
 }
 
 header {
@@ -15,14 +16,16 @@ header {
   padding: 4px;
 }
 
-header h1 { /* home page uses this */
+header h1 {
+  /* home page uses this */
   display: inline-block;
   margin: 0;
   padding: 0;
   font-size: inherit;
   font-weight: normal;
 }
-summary:hover, summary:focus {
+summary:hover,
+summary:focus {
   text-decoration: none; /* override water.css */
 }
 details .summary-header {
@@ -45,7 +48,7 @@ details .summary-header h2 {
 
 .pretty-form fieldset {
   margin: 0;
-  border: solid 1px rgba(0,0,0,.2);
+  border: solid 1px rgba(0, 0, 0, 0.2);
 }
 
 .pretty-form fieldset > div {
@@ -53,7 +56,7 @@ details .summary-header h2 {
 }
 
 .pretty-form input:not([type]),
-.pretty-form input[type=text] {
+.pretty-form input[type="text"] {
   min-width: 200px;
 }
 
