@@ -1,0 +1,148 @@
+<!doctype html><html><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
+<style>
+form div {
+  display: inline-block;
+}
+
+.container {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: masonry;
+  align-tracks: start;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+figure {
+  margin: 0;
+  background:
+    radial-gradient(circle, transparent 70%, var(--color-v, black) 100%),
+    linear-gradient(to right, transparent, var(--color, grey)),
+    var(--clip-url);
+  background-position: center center;
+  background-size: cover;
+  background-blend-mode: 
+    var(--blend-top, normal),
+    var(--blend-bottom, saturation),
+    normal;
+}
+
+figure img {
+  visibility: hidden;
+}
+
+</style>
+  <h1>CSS blend</h1>
+  <form>
+    <div>
+      <label for="blend-top">Top Layer</label>
+      <select id="blend-top">
+        <option selected>normal</option>
+        <option>multiply</option>
+        <option>screen</option>
+        <option>overlay</option>
+        <option>darken</option>
+        <option>lighten</option>
+        <option>color-dodge</option>
+        <option>color-burn</option>
+        <option>hard-light</option>
+        <option>soft-light</option>
+        <option>difference</option>
+        <option>exclusion</option>
+        <option>hue</option>
+        <option>saturation</option>
+        <option>color</option>
+        <option>luminosity</option>
+      </select>
+    </div>
+    <div>
+      <label for="color-v">Top Color</label>
+      <select id="color-v">
+        <option>transparent</option>
+        <option selected>black</option>
+        <option>green</option>
+        <option>red</option>
+        <option>hotpink</option>
+        <option>blue</option>
+        <option>yellow</option>
+        <option>orange</option>
+        <option>purple</option>
+      </select>
+    </div>
+    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <div>
+      <label for="blend-bottom">Middle Layer</label>
+      <select id="blend-bottom">
+        <option>normal</option>
+        <option>multiply</option>
+        <option>screen</option>
+        <option>overlay</option>
+        <option>darken</option>
+        <option>lighten</option>
+        <option>color-dodge</option>
+        <option>color-burn</option>
+        <option>hard-light</option>
+        <option>soft-light</option>
+        <option>difference</option>
+        <option>exclusion</option>
+        <option>hue</option>
+        <option selected>saturation</option>
+        <option>color</option>
+        <option>luminosity</option>
+      </select>
+    </div>
+    <div>
+      <label for="color">Middle Color</label>
+      <select id="color">
+        <option>transparent</option>
+        <option selected>grey</option>
+        <option>green</option>
+        <option>red</option>
+        <option>hotpink</option>
+        <option>blue</option>
+        <option>yellow</option>
+        <option>orange</option>
+        <option>purple</option>
+      </select>
+    </div>
+  </form>
+  <div class="container">
+    <figure style="--clip-url: url('./texture1.jpg')">
+      <img src="./texture1.jpg" alt="" />
+    </figure>
+    <figure style="--clip-url: url('./texture2.jpg')">
+      <img src="./texture2.jpg" alt="" />
+    </figure>
+    <figure style="--clip-url: url('./texture3.jpg')">
+      <img src="./texture3.jpg" alt="" />
+    </figure>
+    <figure style="--clip-url: url('./texture4.jpg')">
+      <img src="./texture4.jpg" alt="" />
+    </figure>
+    <figure style="--clip-url: url('./texture5.jpg')">
+      <img src="./texture5.jpg" alt="" />
+    </figure>
+    <figure style="--clip-url: url('./texture6.jpg')">
+      <img src="./texture6.jpg" alt="" />
+    </figure>
+  </div>
+
+  <script>
+    const selects = Array.from(document.querySelectorAll('select'));
+
+    function setProp(el) {
+      document.documentElement.style.setProperty(`--${el.id}`, el.value);
+    }
+    selects.forEach(select => {
+      setProp(select);
+      select.addEventListener('change', e => {
+        setProp(e.currentTarget);
+      });
+    })
+  </script>
+    
+</body></html>
