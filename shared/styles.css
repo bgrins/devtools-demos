@@ -1,19 +1,30 @@
+@import url("./water.css");
 
 body {
-  background: #f3f3f3;
+  max-width: initial;
   padding: 0 10px;
   margin: 0;
   font-family: "Lucida Sans Typewriter", "Lucida Console", Monaco, "Bitstream Vera Sans Mono", monospace;
 }
 
 header {
-  background: #eee;
-  border-bottom: solid 2px #ccc;
+  background: #eee3;
+  border-bottom: solid 2px #ccc3;
   margin: 0 -10px;
   margin-bottom: 5px;
   padding: 4px;
 }
 
+summary:hover, summary:focus {
+  text-decoration: none; /* override water.css */
+}
+details .summary-header {
+  display: inline-block;
+  vertical-align: top;
+}
+details .summary-header h2 {
+  margin: 0;
+}
 .repo-link {
   float: right;
   font-size: 12px;
