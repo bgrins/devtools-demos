@@ -19,6 +19,4 @@ This template can be copied for adding new demos.  This will get a consistent st
 
 # Getting Setup
 
-+ Install dependencies `npm install`
-+ Running a local server `npm start`
-+ Running build environment, which lints with jshint `grunt`
+Start a server from the root (i.e. `python3 -m http.server`)
