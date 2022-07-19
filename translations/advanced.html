@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <style type="text/css">
+      [data-count] {
+        color: red;
+      }
+      [data-count*="1"] {
+        background-color: green;
+      }
+    </style>
+  </head>
+  <body class="header">
+    <p>
+      <!-- https://es.wikipedia.org/wiki/Mozilla_(comunidad) -->
+      Mozilla (estilizado como moz://a) es una comunidad de software libre
+      fundada en 1998 por miembros de Netscape. La comunidad de Mozilla usa,
+      desarrolla, difunde y brinda soporte a los productos de Mozilla,
+      promoviendo de esa forma exclusivamente el software libre y los estándares
+      abiertos, solo con excepciones menores.1​ La comunidad es mantenida
+      institucionalmente por la Fundación Mozilla, que es sin fines de lucro, y
+      su filial que paga impuestos, Corporación Mozilla.2​
+    </p>
+    <p>
+      Los productos de Mozilla incluyen el navegador de web Firefox, el cliente
+      de correo Thunderbird, el sistema operativo para móviles Firefox OS, el
+      sistema de seguimiento de bugs Bugzilla, el motor de renderizado Gecko, el
+      servicio de "listas de lectura" Pocket y entre muchos otros.3​
+    </p>
+    <hr />
+    <!-- <div id="n1">Bem vindo a pagina <b id="n2">da Mozilla</b></div> -->
+    <h2>Mapping HTML elements</h2>
+    <div>1. Bienvenido a la página <b>de Mozilla</b></div>
+    <div>2. Bienvenido a la página <b>de Mozilla</b>.</div>
+    <div>3. Bienvenido a <b>la página</b> de Mozilla</div>
+    <div>4. Bienvenido a la página de Mozilla</div>
+    <h2>Shadow DOM</h2>
+    <div>
+      <custom-element-slotted-text
+        >5. Bienvenido a la página de Mozilla</custom-element-slotted-text
+      >
+    </div>
+    <div>
+      <custom-element-slotted-text
+        >6. <b>Bienvenido</b> a la página de
+        Mozilla</custom-element-slotted-text
+      >
+    </div>
+    <div>
+      <custom-element-shadow-text
+        >7. Bienvenido a la página de Mozilla</custom-element-shadow-text
+      >
+    </div>
+    <h2>Mutations</h2>
+
+    <h2>Número de segundos desde la carga: <span> </span></h2>
+    <h2 class="changing">Cambio de atributo</h2>
+    <button id="togglecontent">cargar contenido dinámicamente</button>
+    <div id="toggledcontent"></div>
+
+    <script>
+      customElements.define(
+        "custom-element-slotted-text",
+        class CE extends HTMLElement {
+          constructor() {
+            super();
+            this.shadow = this.attachShadow({ mode: "open" });
+            this.shadow.innerHTML = `Hola de Shadow DOM: <slot></slot>`;
+          }
+        }
+      );
+      customElements.define(
+        "custom-element-shadow-text",
+        class CE extends HTMLElement {
+          constructor() {
+            super();
+            this.shadow = this.attachShadow({ mode: "open" });
+          }
+          connectedCallback() {
+            this.shadow.textContent = `Hola de Shadow DOM: ${this.textContent}`;
+          }
+        }
+      );
+    </script>
+    <script type="text/javascript">
+      var current = 1;
+      var changingH2 = document.querySelector("h2.changing");
+      var interval = setInterval(function () {
+        var foo = 1;
+        document.querySelector("h2 span").childNodes[0].nodeValue = current++;
+        changingH2.setAttribute("data-count", current);
+      }, 1000);
+
+      changingH2.setAttribute("updated", "in function");
+      setTimeout(function () {
+        changingH2.setAttribute("updated", "in timeout 1");
+      }, 200);
+      setTimeout(function () {
+        changingH2.setAttribute("updated", "in timeout 2");
+      }, 750);
+
+      document.querySelector("#togglecontent").onclick = () => {
+        let container = document.querySelector("#toggledcontent");
+        container.textContent = container.textContent.length
+          ? ``
+          : `
+El 23 de enero de 1998, Netscape hizo dos anuncios: primero que Netscape
+Communicator sería gratuito; y segundo que el código de fuente sería
+abierto.4​ Un día Jamie Zawinski de Netscape registró mozilla.org.5​ El
+proyecto tomó su nombre, "Mozilla", después del nombre código original del
+navegador Netscape Navigator — un portmanteau de "Mosaic y Godzilla",6​ y
+utilizado para coordinar el desarrollo de la Suite de aplicaciones de
+Mozilla, la versión de código abierto del software de internet de Netscape,
+Netscape Communicator7​8​ Jamie Zawinski dice que se le ocurrió el nombre de
+"Mozilla" en una reunión del personal de Netscape.9​10​ Un grupo pequeño de
+empleados de Netscape fueron seleccionados para la coordinación de la nueva
+comunidad.
+        `;
+      };
+    </script>
+  </body>
+</html>

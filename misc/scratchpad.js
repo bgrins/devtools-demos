@@ -32,3 +32,6 @@ let typeC = C.from([1, 2, 3]);
 let typeCArray = C.from([1, 2, 3]) // return type: C
   .map((x) => x + 1); // return type: C
 console.log(typeC instanceof C, typeC, typeCArray instanceof C, typeCArray);
+
+
+// MemberExpression[object.name="symbol"][property.name="species"]
