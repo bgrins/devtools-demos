@@ -257,7 +257,32 @@
  </section> 
  </article> 
  </main> 
- 
- <div id=goog-gt-tt class="skiptranslate sf-hidden" dir=ltr></div>
- 
-<div class=goog-te-spinner-pos><div class=goog-te-spinner-animation><svg xmlns=http://www.w3.org/2000/svg class=goog-te-spinner width=96px height=96px viewBox="0 0 66 66"><circle class=goog-te-spinner-path fill=none stroke-width=6 stroke-linecap=round cx=33 cy=33 r=30></circle></svg></div></div><div id=GOOGLE_INPUT_CHEXT_FLAG input input_stat='{"tlang":true,"tsbc":true,"pun":true,"mk":false,"ss":true}' style=display:none></div>
+<script>
+
+const targetNode = document.body;
+const observerOptions = {
+  childList: true,
+  attributes: true,
+  subtree: true
+}
+
+let firstMutation = null;
+let lastMutation = null;
+let mutationsSettled = null;
+
+function logTime() {
+  console.log(`Mutations setted ${lastMutation - firstMutation}`)
+}
+const observer = new MutationObserver(() => {
+  if (!firstMutation) {
+    firstMutation = performance.now();
+    console.log(`Received first mutation at ${firstMutation}`);
+  }
+  lastMutation = performance.now();
+  clearTimeout(mutationsSettled);
+  mutationsSettled = setTimeout(logTime, 5000);
+});
+observer.observe(targetNode, observerOptions);
+
+
+</script>
