@@ -256,33 +256,32 @@
  </div> 
  </section> 
  </article> 
- </main> 
+ </main>
+ 
 <script>
-
-const targetNode = document.body;
-const observerOptions = {
-  childList: true,
-  attributes: true,
-  subtree: true
-}
-
-let firstMutation = null;
-let lastMutation = null;
-let mutationsSettled = null;
-
-function logTime() {
-  console.log(`Mutations setted ${lastMutation - firstMutation}`)
-}
-const observer = new MutationObserver(() => {
-  if (!firstMutation) {
-    firstMutation = performance.now();
-    console.log(`Received first mutation at ${firstMutation}`);
+  const TIME_TO_SETTLE = 3000;
+  const targetNode = document.body;
+  const observerOptions = {
+    childList: true,
+    attributes: true,
+    subtree: true
   }
-  lastMutation = performance.now();
-  clearTimeout(mutationsSettled);
-  mutationsSettled = setTimeout(logTime, 5000);
-});
-observer.observe(targetNode, observerOptions);
-
-
+  
+  let firstMutation = null;
+  let lastMutation = null;
+  let mutationsSettled = null;
+  
+  function logTime() {
+    console.log(`Mutations setted ${lastMutation - firstMutation}`)
+  }
+  const observer = new MutationObserver(() => {
+    if (!firstMutation) {
+      firstMutation = performance.now();
+      console.log(`Received first mutation at ${firstMutation}`);
+    }
+    lastMutation = performance.now();
+    clearTimeout(mutationsSettled);
+    mutationsSettled = setTimeout(logTime, TIME_TO_SETTLE);
+  });
+  observer.observe(targetNode, observerOptions);  
 </script>
