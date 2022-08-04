@@ -1,0 +1,32 @@
+<!doctype html><html lang="en" dir="ltr"><head><meta charset="UTF-8"><link rel='stylesheet' href='../shared/styles.css' /><script src="../shared/script.js"></script></head><body class="header">
+  <h1>Moving a playing video between windows</h1>
+
+  <video autoplay loop muted playsinline src="numbered.mp4"></video>
+  <button>Move</button>
+
+  <script>
+    let button = document.querySelector("button");
+    let video = document.querySelector("video");
+    let win;
+    button.addEventListener("click", async () => {
+      if (!win) {
+        win = window.open("about:blank");
+        await new Promise((r) =>
+          win.addEventListener("load", r, { once: true })
+        );
+      }
+      console.log(win);
+      if (document.contains(button)) {
+        win.document.body.append(video);
+        win.document.body.append(button);
+        win.focus();
+      } else {
+        document.body.append(video);
+        document.body.append(button);
+        win.close();
+        win = null;
+      }
+    });
+  </script>
+  
+</body></html>
