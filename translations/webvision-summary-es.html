@@ -84,7 +84,8 @@
   function logTime() {
     console.log(`Mutations setted ${lastMutation - firstMutation}`)
   }
-  const observer = new MutationObserver(() => {
+  const observer = new MutationObserver((e) => {
+    console.log(e);
     if (!firstMutation) {
       firstMutation = performance.now();
       console.log(`Received first mutation at ${firstMutation}`);
