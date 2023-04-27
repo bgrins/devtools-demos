@@ -7238,17 +7238,25 @@ var t = Handlebars.compile(`
             {{/this}}
 `);
 
-var start = performance.now();
-t([]);
-var first = performance.now() - start;
-start = performance.now();
-t([]);
-var second = performance.now() - start;
 
-console.log(`First call ${first}`);
-document.body.append(`First call ${first}`);
+window.onload = function() {
 
-console.log(`Second call ${second}`);
-document.body.append(` - Second call ${second}`);
+  performance.mark("first-start");
+  var start = performance.now();
+  t([]);
+  var first = performance.now() - start;
+  performance.measure("first", "first-start");
+  performance.mark("second-start");
+  start = performance.now();
+  t([]);
+  var second = performance.now() - start;
+  performance.measure("second", "second-start");
+
+  console.log(`First call ${first}`);
+  document.body.append(`First call ${first}`);
+
+  console.log(`Second call ${second}`);
+  document.body.append(` - Second call ${second}`);
+}
 </script>
 </body>
