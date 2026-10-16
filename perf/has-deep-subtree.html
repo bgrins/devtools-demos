@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>:has() subtree benchmark</title>
+<style>
+  :root { color-scheme: light dark; font: 16px/1.5 system-ui, sans-serif; }
+  body { max-inline-size: 1120px; margin: 2rem auto; padding-inline: 1rem; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-block-end: .5rem; }
+  h2 { font-size: 1.2rem; }
+  p { max-inline-size: 90ch; }
+  fieldset, details, .panel { border: 1px solid #8887; border-radius: 8px; padding: 1rem; margin-block: 1rem; }
+  legend { font-weight: 650; }
+  .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; }
+  label { display: block; }
+  input:not([type="checkbox"]), select { box-sizing: border-box; inline-size: 100%; padding: .4rem; font: inherit; }
+  small { display: block; opacity: .8; }
+  button { font: inherit; padding: .45rem .8rem; cursor: pointer; }
+  button:disabled { cursor: default; }
+  .actions { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; }
+  #run { background: #1263bc; color: white; border: 1px solid #1263bc; border-radius: 4px; }
+  #status { min-block-size: 1.5em; font-weight: 600; }
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; inline-size: 100%; font-size: .88rem; font-variant-numeric: tabular-nums; }
+  th, td { text-align: start; padding: .45rem; border-block-end: 1px solid #8885; white-space: nowrap; }
+  th { vertical-align: bottom; }
+  caption { text-align: start; margin-block-end: .6rem; }
+  code { overflow-wrap: anywhere; }
+  #browser { overflow-wrap: anywhere; font-size: .85rem; }
+  #fixture { inline-size: 100%; block-size: 40px; border: 1px dashed #8887; }
+  summary { cursor: pointer; font-weight: 650; }
+  .check { margin-block: .8rem; }
+  [hidden] { display: none !important; }
+</style>
+<h1><code>:has()</code> subtree benchmark</h1>
+<p>Compare 0, 1 or 2 <code>:has()</code> checks against a fresh tree with a hidden subtree.</p>
+<form id="settings">
+  <fieldset id="inputs">
+    <legend>Workload</legend>
+    <div id="presets" class="actions">
+      <button type="button" data-preset="small">Small comparison</button>
+      <button type="button" data-preset="depth1000">1k deep: compare</button>
+      <button type="button" data-preset="deepControl">10k deep: one :has()</button>
+      <button type="button" data-preset="deep">10k deep: two :has()</button>
+      <button type="button" data-preset="extreme">50k deep: two :has()</button>
+      <button type="button" data-preset="wide">Wide tree: compare</button>
+    </div>
+    <p><small>Presets fill the form. Press Run to start.</small></p>
+    <div class="controls">
+      <label>Chain depth <input id="depth" type="number" min="0" max="50000" step="1" value="256" required>
+        <small>Descendants below the matching child.</small></label>
+      <label>Extra leaves per level <input id="leaves" type="number" min="0" max="20" step="1" value="0" required>
+        <small>Add width without increasing chain depth.</small></label>
+      <label>Preceding sibling elements <input id="siblings" type="number" min="0" max="20000" step="1" value="511" required>
+        <small>511 preserves the original 512-element group.</small></label>
+      <label>Selectors <select id="mode">
+        <option value="compare">Compare baseline, one, two</option>
+        <option value="0">Baseline: no :has()</option>
+        <option value="1">One :has()</option>
+        <option value="2">Two :has()</option>
+        <option value="custom">Custom count</option>
+      </select></label>
+      <label>Custom :has() count <input id="count" type="number" min="1" max="8" step="1" value="2" required>
+        <small>Used only for “Custom count”; all match the same child.</small></label>
+      <label>Measured repeats per mode <input id="repeats" type="number" min="1" max="30" step="1" value="5" required></label>
+      <label>Warmup repeats per mode <input id="warmups" type="number" min="0" max="5" step="1" value="1" required>
+        <small>Recorded separately; excluded from summaries.</small></label>
+      <label>Forced evaluation <select id="flush">
+        <option value="layout-color">Layout flush + computed color (original test)</option>
+        <option value="color">Computed color only</option>
+      </select></label>
+      <label>Pause between trials (ms) <input id="pause" type="number" min="0" max="2000" step="1" value="50" required>
+        <small>Not included in measured times.</small></label>
+      <label>Stop after a slow trial (ms) <input id="slow" type="number" min="0" max="60000" step="1" value="2000" required>
+        <small>Construction + attachment + evaluation + removal. 0 disables.</small></label>
+      <label>Build / profile label <input id="build" maxlength="160" placeholder="e.g. release 158, default profile">
+        <small>Copy exact version and build ID from about:support.</small></label>
+    </div>
+    <label class="check"><input id="stress" type="checkbox"> Allow depth above 2,000 or more than 20,000 elements</label>
+    <small>Deep trees may crash the tab. Stop works between trials.</small>
+    <p id="estimate"></p>
+  </fieldset>
+  <div class="actions">
+    <button id="run" type="submit">Run</button>
+    <button id="save-url" type="button">Update URL</button>
+    <button id="stop" type="button" disabled>Stop after this trial</button>
+    <button id="export" type="button" disabled>Export JSON</button>
+    <button id="clear" type="button" disabled>Clear results</button>
+  </div>
+</form>
+<p id="status" role="status" aria-live="polite">Ready.</p>
+<p id="browser"></p>
+<div class="panel scroll">
+  <h2>Results</h2>
+  <table>
+    <caption>Times in milliseconds. Cells show median [minimum–maximum]. Warmups are excluded.</caption>
+    <thead><tr><th>Batch</th><th>:has count</th><th>Depth / leaves</th><th>Elements</th><th>Samples</th><th>Build DOM</th><th>Attach</th><th>Forced evaluation</th><th>Remove</th><th>Evaluation mode</th></tr></thead>
+    <tbody id="summary"></tbody>
+  </table>
+</div>
+<details>
+  <summary>Every trial</summary>
+  <div class="scroll"><table>
+    <thead><tr><th>Batch</th><th>Phase</th><th>Repeat</th><th>:has count</th><th>Elements</th><th>Build DOM</th><th>Attach</th><th>Evaluation</th><th>Remove</th><th>Color check</th></tr></thead>
+    <tbody id="trials"></tbody>
+  </table></div>
+</details>
+<details>
+  <summary>Notes</summary>
+  <ul>
+    <li>Two checks use <code>#subject:has(.first):has(.second)</code>. Both match the first child;
+      the second lookup triggers subtree-filter construction.</li>
+    <li>Evaluation includes the browser work needed for the style read and optional layout flush.
+      DOM creation, attachment and removal are timed separately.</li>
+    <li>Keep this tab in the foreground and close DevTools for timing. Browser timer precision and GC affect results.</li>
+    <li>The fix removes recursion. It still visits the subtree. Crash thresholds depend on stack size and
+      style-thread scheduling; this page does not change Firefox preferences.</li>
+    <li>URL settings: <code>depth</code>, <code>leaves</code>, <code>siblings</code>, <code>mode</code>
+      (<code>compare</code>, <code>0</code>, <code>1</code>, <code>2</code>, <code>custom</code>),
+      <code>count</code>, <code>repeats</code>, <code>warmups</code>, <code>flush</code>
+      (<code>layout-color</code> or <code>color</code>), <code>pause</code>, <code>slow</code>,
+      <code>build</code>, <code>stress</code> (<code>1</code> or <code>0</code>).
+      Settings load without running a trial.</li>
+  </ul>
+</details>
+<p><small>Test document:</small></p>
+<iframe id="fixture" title="Isolated document used for the selector experiment"></iframe>
+<script>
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const batches = [];
+  const expectedColor = "rgb(0, 128, 0)";
+  const names = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth"];
+  const settingIds = ["depth", "leaves", "siblings", "mode", "count", "repeats", "warmups", "flush", "pause", "slow", "build", "stress"];
+  const defaults = Object.fromEntries(settingIds.map(id => [id, $(id).type === "checkbox" ? $(id).checked : $(id).value]));
+  const presets = {
+    small: { ...defaults },
+    depth1000: { ...defaults, depth: "1000" },
+    deepControl: { ...defaults, depth: "10000", mode: "1", repeats: "1", warmups: "0", stress: true },
+    deep: { ...defaults, depth: "10000", mode: "2", repeats: "1", warmups: "0", stress: true },
+    extreme: { ...defaults, depth: "50000", mode: "2", repeats: "1", warmups: "0", stress: true },
+    wide: { ...defaults, depth: "64", leaves: "20" },
+  };
+  let pendingHash = false;
+  let running = false;
+  let stopped = false;
+  let fixtureDocument;
+  let fixtureWindow;
+  let rule;
+  let host;
+
+  function integer(id) {
+    const input = $(id);
+    const value = input.valueAsNumber;
+    if (!Number.isSafeInteger(value) || value < Number(input.min) || value > Number(input.max)) {
+      throw new Error(`${input.parentElement.firstChild.textContent.trim()}: enter a whole number from ${input.min} to ${input.max}.`);
+    }
+    return value;
+  }
+
+  function config() {
+    const settings = Object.fromEntries(["depth", "leaves", "siblings", "count", "repeats", "warmups", "pause", "slow"].map(id => [id, integer(id)]));
+    settings.mode = $("mode").value;
+    settings.flush = $("flush").value;
+    settings.build = $("build").value.trim();
+    settings.stress = $("stress").checked;
+    settings.elements = settings.siblings + 3 + settings.depth * (settings.leaves + 1);
+    if (settings.elements > 250000) {
+      throw new Error("Limit this experiment to 250,000 generated elements per trial.");
+    }
+    settings.counts = settings.mode === "compare" ? [0, 1, 2] : [settings.mode === "custom" ? settings.count : Number(settings.mode)];
+    if (!settings.counts.every(count => Number.isInteger(count) && count >= 0 && count <= 8)) {
+      throw new Error("Choose a supported selector count.");
+    }
+    if (!["layout-color", "color"].includes(settings.flush)) {
+      throw new Error("Choose a supported evaluation mode.");
+    }
+    return settings;
+  }
+
+  function estimate() {
+    try {
+      const c = config();
+      $("estimate").textContent = `${c.elements.toLocaleString()} generated elements per trial; ${c.counts.length * c.repeats} measured trials + ${c.counts.length * c.warmups} warmups.`;
+    } catch (error) {
+      $("estimate").textContent = error.message;
+    }
+  }
+
+  function applyHashSettings() {
+    const params = new URLSearchParams(location.hash.slice(1));
+    const invalid = [];
+    for (const id of settingIds) {
+      const input = $(id);
+      if (input.type === "checkbox") {
+        input.checked = defaults[id];
+      } else {
+        input.value = defaults[id];
+      }
+      if (!params.has(id)) {
+        continue;
+      }
+      const value = params.get(id);
+      if (input.type === "checkbox") {
+        if (["1", "true", "0", "false"].includes(value)) {
+          input.checked = value === "1" || value === "true";
+        } else {
+          invalid.push(id);
+        }
+      } else if (input.type === "number") {
+        const number = Number(value);
+        if (/^\d+$/.test(value) && Number.isSafeInteger(number) && number >= Number(input.min) && number <= Number(input.max)) {
+          input.value = String(number);
+        } else {
+          invalid.push(id);
+        }
+      } else if (input.tagName === "SELECT") {
+        if (Array.from(input.options).some(option => option.value === value)) {
+          input.value = value;
+        } else {
+          invalid.push(id);
+        }
+      } else if (value.length <= input.maxLength) {
+        input.value = value;
+      } else {
+        invalid.push(id);
+      }
+    }
+    $("status").textContent = invalid.length ? `Ignored invalid URL settings: ${invalid.join(", ")}.` : "Ready.";
+    estimate();
+  }
+
+  function updateURL() {
+    try {
+      config();
+      const params = new URLSearchParams();
+      for (const id of settingIds) {
+        const input = $(id);
+        const value = input.type === "checkbox" ? input.checked : input.value;
+        if (value !== defaults[id]) {
+          params.set(id, input.type === "checkbox" ? (value ? "1" : "0") : value);
+        }
+      }
+      const url = new URL(location.href);
+      url.hash = params.toString();
+      history.replaceState(null, "", url);
+      $("status").textContent = "Settings saved in URL.";
+    } catch (error) {
+      $("status").textContent = error.message;
+    }
+  }
+
+  async function prepareFixture() {
+    const frame = $("fixture");
+    await new Promise(resolve => {
+      frame.onload = resolve;
+      frame.srcdoc = '<!doctype html><html><meta charset="utf-8"><style>body { margin: 0; } .first { display: none; } #subject { color: rgb(128, 0, 0); }</style><style id="rule"></style><body><main id="host"></main></body></html>';
+    });
+    fixtureDocument = frame.contentDocument;
+    fixtureWindow = frame.contentWindow;
+    rule = fixtureDocument.getElementById("rule");
+    host = fixtureDocument.getElementById("host");
+  }
+
+  function trial(c, count) {
+    const selector = "#subject" + names.slice(0, count).map(name => `:has(.${name})`).join("");
+    rule.textContent = `${selector} { color: ${expectedColor}; }`;
+    fixtureDocument.body.offsetWidth;
+    let elements = 0;
+    const create = () => {
+      elements++;
+      return fixtureDocument.createElement("div");
+    };
+    const start = performance.now();
+    const group = create();
+    for (let i = 0; i < c.siblings; i++) {
+      group.appendChild(create());
+    }
+    const subject = group.appendChild(create());
+    subject.id = "subject";
+    const first = subject.appendChild(create());
+    first.className = names.join(" ");
+    let leaf = first;
+    for (let i = 0; i < c.depth; i++) {
+      const next = leaf.appendChild(create());
+      for (let j = 0; j < c.leaves; j++) {
+        leaf.appendChild(create());
+      }
+      leaf = next;
+    }
+    const built = performance.now();
+    host.appendChild(group);
+    const attached = performance.now();
+    if (c.flush === "layout-color") {
+      fixtureDocument.body.offsetWidth;
+    }
+    const color = fixtureWindow.getComputedStyle(subject).color;
+    const evaluated = performance.now();
+    group.remove();
+    const removed = performance.now();
+    return {
+      count, selector, elements, color, passed: color === expectedColor,
+      buildMs: built - start, attachMs: attached - built,
+      evaluateMs: evaluated - attached, removeMs: removed - evaluated,
+      totalMs: removed - start,
+    };
+  }
+
+  function format(value) {
+    return value.toFixed(3);
+  }
+
+  function cell(row, text) {
+    const td = row.insertCell();
+    td.textContent = text;
+  }
+
+  function renderTrial(batch, item) {
+    const row = $("trials").insertRow();
+    [batch.id, item.phase, item.repeat, item.count, item.elements, format(item.buildMs), format(item.attachMs),
+      format(item.evaluateMs), format(item.removeMs), item.passed ? "Pass" : `FAIL: ${item.color}`].forEach(value => cell(row, value));
+  }
+
+  function stats(items, key) {
+    const values = items.map(item => item[key]).sort((a, b) => a - b);
+    const middle = Math.floor(values.length / 2);
+    const median = values.length % 2 ? values[middle] : (values[middle - 1] + values[middle]) / 2;
+    return `${format(median)} [${format(values[0])}–${format(values.at(-1))}]`;
+  }
+
+  function renderSummary() {
+    $("summary").replaceChildren();
+    for (const batch of batches) {
+      for (const count of batch.config.counts) {
+        const items = batch.trials.filter(item => item.phase === "measured" && item.count === count && item.passed);
+        if (!items.length) {
+          continue;
+        }
+        const row = $("summary").insertRow();
+        [batch.id, count, `${batch.config.depth} / ${batch.config.leaves}`, items[0].elements, items.length,
+          ...["buildMs", "attachMs", "evaluateMs", "removeMs"].map(key => stats(items, key)), batch.config.flush].forEach(value => cell(row, value));
+      }
+    }
+  }
+
+  async function run(event) {
+    event.preventDefault();
+    if (running) {
+      return;
+    }
+    let c;
+    try {
+      c = config();
+      if (!c.stress && (c.depth > 2000 || c.elements > 20000)) {
+        throw new Error("Enable larger stress runs before using this depth or element count.");
+      }
+      if (document.hidden) {
+        throw new Error("Bring this tab to the foreground before running.");
+      }
+      if (c.counts.some(count => count > 0) && !CSS.supports("selector(:has(.first))")) {
+        throw new Error("This browser does not support :has(). The plain-selector baseline is still available.");
+      }
+      const savedTrials = batches.reduce((total, batch) => total + batch.trials.length, 0);
+      if (savedTrials + c.counts.length * (c.repeats + c.warmups) > 2000) {
+        throw new Error("Export and clear results before exceeding 2,000 recorded trials.");
+      }
+    } catch (error) {
+      $("status").textContent = error.message;
+      return;
+    }
+    running = true;
+    stopped = false;
+    $("inputs").disabled = true;
+    $("run").disabled = true;
+    $("save-url").disabled = true;
+    $("stop").disabled = false;
+    $("clear").disabled = true;
+    $("export").disabled = true;
+    const batch = { id: batches.length + 1, started: new Date().toISOString(), userAgent: navigator.userAgent,
+      hardwareConcurrency: navigator.hardwareConcurrency, config: c, trials: [], outcome: "running" };
+    batches.push(batch);
+    try {
+      $("status").textContent = `Preparing batch ${batch.id}…`;
+      await prepareFixture();
+      outer: for (const phase of ["warmup", "measured"]) {
+        const repeats = phase === "warmup" ? c.warmups : c.repeats;
+        for (let repeat = 0; repeat < repeats; repeat++) {
+          const order = c.counts.map((_, i) => c.counts[(i + repeat) % c.counts.length]);
+          for (const count of order) {
+            $("status").textContent = `Batch ${batch.id}: ${phase} ${repeat + 1}/${repeats}, ${count} :has(), ${c.elements.toLocaleString()} elements.`;
+            await new Promise(resolve => setTimeout(resolve, c.pause));
+            if (stopped || document.hidden) {
+              batch.outcome = document.hidden ? "stopped: tab became hidden" : "stopped by user";
+              break outer;
+            }
+            const item = { ...trial(c, count), phase, repeat: repeat + 1 };
+            batch.trials.push(item);
+            renderTrial(batch, item);
+            renderSummary();
+            if (!item.passed || item.elements !== c.elements) {
+              throw new Error(`Trial validation failed: ${item.color}; ${item.elements} elements.`);
+            }
+            if (c.slow > 0 && item.totalMs > c.slow) {
+              batch.outcome = `stopped: trial took ${format(item.totalMs)} ms, above the ${c.slow} ms limit`;
+              break outer;
+            }
+          }
+        }
+      }
+      if (batch.outcome === "running") {
+        batch.outcome = "completed";
+      }
+      $("status").textContent = `Batch ${batch.id} ${batch.outcome}. ${batch.trials.filter(item => item.phase === "measured").length} measured trials recorded.`;
+    } catch (error) {
+      batch.outcome = `error: ${error.message}`;
+      $("status").textContent = batch.outcome;
+    } finally {
+      if (host) {
+        host.replaceChildren();
+      }
+      batch.finished = new Date().toISOString();
+      running = false;
+      $("inputs").disabled = false;
+      $("run").disabled = false;
+      $("save-url").disabled = false;
+      $("stop").disabled = true;
+      $("clear").disabled = false;
+      $("export").disabled = false;
+      if (pendingHash) {
+        pendingHash = false;
+        applyHashSettings();
+      }
+    }
+  }
+
+  $("settings").addEventListener("submit", run);
+  $("save-url").addEventListener("click", updateURL);
+  for (const button of $("presets").querySelectorAll("button")) {
+    button.addEventListener("click", () => {
+      for (const [id, value] of Object.entries(presets[button.dataset.preset])) {
+        const input = $(id);
+        if (input.type === "checkbox") {
+          input.checked = value;
+        } else {
+          input.value = value;
+        }
+      }
+      estimate();
+      updateURL();
+    });
+  }
+  window.addEventListener("hashchange", () => {
+    if (running) {
+      pendingHash = true;
+    } else {
+      applyHashSettings();
+    }
+  });
+  $("settings").addEventListener("input", estimate);
+  $("stop").addEventListener("click", () => {
+    stopped = true;
+    $("status").textContent = "Stopping before the next trial…";
+  });
+  $("clear").addEventListener("click", () => {
+    batches.length = 0;
+    $("summary").replaceChildren();
+    $("trials").replaceChildren();
+    $("clear").disabled = true;
+    $("export").disabled = true;
+    $("status").textContent = "Results cleared.";
+  });
+  $("export").addEventListener("click", () => {
+    const payload = { schema: 1, experiment: "deep-subtree-has", exported: new Date().toISOString(), batches };
+    const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" }));
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `has-deep-subtree-${Date.now()}.json`;
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+  $("browser").textContent = `Browser: ${navigator.userAgent}. Logical processors reported: ${navigator.hardwareConcurrency ?? "unknown"}.`;
+  applyHashSettings();
+</script>
+</html>
